@@ -1,0 +1,1657 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pony 2026 世界杯胜平负预测表</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: #0d1b2f;
+      --panel-2: #13243d;
+      --line: rgba(255, 255, 255, .12);
+      --text: #edf6ff;
+      --muted: #9fb2c8;
+      --green: #48e67b;
+      --blue: #48c7ff;
+      --pink: #ff5d9e;
+      --yellow: #ffd166;
+      --orange: #ff9f43;
+      --purple: #a66cff;
+      --locked: #1d3557;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(72, 199, 255, .22), transparent 27rem),
+        radial-gradient(circle at 88% 6%, rgba(255, 93, 158, .17), transparent 25rem),
+        linear-gradient(135deg, #06111e 0%, #0b1a30 52%, #07111f 100%);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+    }
+
+    .page {
+      width: min(1480px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 26px 0 44px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: end;
+      padding: 22px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 4.5vw, 68px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .headline-gradient {
+      color: transparent;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--pink), var(--yellow));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .sub {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button, select, input {
+      font: inherit;
+    }
+
+    .tool-btn, .choice {
+      border: 1px solid var(--line);
+      background: #10213a;
+      color: var(--text);
+      border-radius: var(--radius);
+      min-height: 42px;
+      padding: 0 14px;
+      cursor: pointer;
+    }
+
+    .tool-btn:hover, .choice:hover {
+      border-color: rgba(72, 199, 255, .7);
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .stat {
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      min-height: 92px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 32px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .share-panel {
+      display: grid;
+      grid-template-columns: minmax(190px, 1fr) auto auto minmax(280px, 1.4fr) auto;
+      gap: 12px;
+      align-items: end;
+      margin: 0 0 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(90deg, rgba(72, 199, 255, .12), rgba(255, 93, 158, .10)),
+        rgba(8, 19, 34, .74);
+    }
+
+    .share-field {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .share-field label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .share-field input {
+      width: 100%;
+      min-height: 42px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: #0c1b30;
+      padding: 0 12px;
+      outline: none;
+    }
+
+    .share-field input:focus {
+      border-color: var(--blue);
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 0 0 14px;
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      padding: 12px 0;
+      background: linear-gradient(180deg, rgba(7, 17, 31, .98), rgba(7, 17, 31, .88));
+      backdrop-filter: blur(10px);
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      min-height: 42px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: #0c1b30;
+      padding: 0 12px;
+      outline: none;
+    }
+
+    .field input:focus, .field select:focus {
+      border-color: var(--blue);
+    }
+
+    .bracket-panel {
+      margin: 0 0 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+        rgba(8, 19, 34, .86);
+      box-shadow: 0 20px 60px rgba(0,0,0,.18);
+      overflow: hidden;
+    }
+
+    .bracket-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(20, 38, 66, .72);
+    }
+
+    .bracket-head h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .bracket-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .bracket-scroll {
+      overflow-x: auto;
+      padding: 16px;
+    }
+
+    .bracket-map {
+      min-width: 1260px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .bracket-half {
+      display: grid;
+      grid-template-columns: 86px repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .half-label {
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      color: #06111e;
+      font-weight: 900;
+      writing-mode: vertical-rl;
+      letter-spacing: 0;
+    }
+
+    .half-label.top { background: linear-gradient(180deg, var(--blue), var(--green)); }
+    .half-label.bottom { background: linear-gradient(180deg, var(--pink), var(--yellow)); }
+
+    .bracket-round {
+      display: grid;
+      gap: 10px;
+    }
+
+    .round-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #d8eaff;
+      font-size: 13px;
+      font-weight: 850;
+      min-height: 24px;
+    }
+
+    .round-title span:last-child {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .bracket-list {
+      display: grid;
+      gap: 10px;
+      height: 100%;
+    }
+
+    .count-8 { grid-template-rows: repeat(8, minmax(82px, 1fr)); }
+    .count-4 { grid-template-rows: repeat(4, minmax(174px, 1fr)); }
+    .count-2 { grid-template-rows: repeat(2, minmax(358px, 1fr)); }
+    .count-1 { grid-template-rows: minmax(726px, 1fr); }
+
+    .bracket-card {
+      position: relative;
+      display: grid;
+      align-content: center;
+      gap: 7px;
+      min-height: 82px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: rgba(7, 18, 34, .78);
+    }
+
+    .bracket-card.ready {
+      border-color: rgba(72, 199, 255, .32);
+    }
+
+    .bracket-card.decided {
+      border-color: rgba(72, 230, 123, .46);
+      box-shadow: inset 0 0 0 1px rgba(72, 230, 123, .15);
+    }
+
+    .bracket-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .bracket-team {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 7px;
+      align-items: center;
+      min-height: 34px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      color: #d8e7f9;
+      background: rgba(255,255,255,.04);
+    }
+
+    .bracket-team.active {
+      color: #06111e;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      font-weight: 900;
+    }
+
+    .bracket-team.pending-team {
+      color: var(--muted);
+      border: 1px dashed rgba(255,255,255,.18);
+      background: transparent;
+    }
+
+    .bracket-flag {
+      font-size: 20px;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .bracket-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .bracket-name small {
+      display: block;
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 650;
+      line-height: 1.1;
+    }
+
+    .bracket-team.active .bracket-name small {
+      color: rgba(6, 17, 30, .72);
+    }
+
+    .final-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    .champion-card {
+      display: grid;
+      align-content: center;
+      gap: 8px;
+      padding: 12px;
+      border-radius: var(--radius);
+      color: #06111e;
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      min-height: 120px;
+    }
+
+    .champion-card .bracket-team {
+      background: rgba(255,255,255,.55);
+      color: #06111e;
+    }
+
+    .champion-title {
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(8, 19, 34, .86);
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+
+    table {
+      width: 100%;
+      min-width: 1120px;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      position: sticky;
+      top: 88px;
+      z-index: 3;
+      background: #142642;
+      color: #d8eaff;
+      padding: 14px 12px;
+      text-align: left;
+      font-size: 14px;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--line);
+    }
+
+    tbody td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      vertical-align: middle;
+    }
+
+    tbody tr {
+      background: rgba(13, 27, 47, .72);
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(16, 34, 58, .72);
+    }
+
+    tbody tr.done {
+      background: rgba(30, 53, 87, .82);
+    }
+
+    tbody tr:hover {
+      background: rgba(38, 70, 110, .72);
+    }
+
+    .match-no {
+      display: inline-grid;
+      place-items: center;
+      min-width: 44px;
+      height: 32px;
+      border-radius: var(--radius);
+      color: #06111e;
+      font-weight: 900;
+      background: var(--yellow);
+    }
+
+    .stage {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .stage-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    tr.done .stage-dot { background: var(--green); }
+
+    .team {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
+      align-items: center;
+      min-width: 210px;
+    }
+
+    .flag {
+      font-size: 30px;
+      line-height: 1;
+      width: 36px;
+      text-align: center;
+    }
+
+    .cn {
+      display: block;
+      font-weight: 850;
+      font-size: 17px;
+      line-height: 1.2;
+      color: #ffffff;
+    }
+
+    .en {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .team-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 6px;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 20px;
+      padding: 0 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(72, 199, 255, .26);
+      color: #cfe6ff;
+      background: rgba(72, 199, 255, .10);
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .stat-pill.value {
+      border-color: rgba(255, 209, 102, .32);
+      color: #ffe3a1;
+      background: rgba(255, 209, 102, .10);
+    }
+
+    .score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 78px;
+      height: 36px;
+      border-radius: var(--radius);
+      background: #071222;
+      border: 1px solid var(--line);
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .score.future {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .actual {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius);
+      color: #082014;
+      background: var(--green);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .pending {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius);
+      color: #d8e7f9;
+      background: rgba(255,255,255,.08);
+      border: 1px dashed rgba(255,255,255,.22);
+      white-space: nowrap;
+    }
+
+    .prediction {
+      display: grid;
+      gap: 8px;
+      min-width: 310px;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .choice {
+      min-height: 36px;
+      padding: 0 8px;
+      color: #d9e8fa;
+      background: #0a1a2e;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .choice.active {
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      border-color: transparent;
+      color: #06111e;
+      font-weight: 900;
+    }
+
+    .note {
+      width: 100%;
+      min-height: 36px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(255,255,255,.04);
+      padding: 0 10px;
+    }
+
+    .advance {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr;
+      gap: 7px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .advance-btn {
+      min-height: 30px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      color: #d9e8fa;
+      background: #0a1a2e;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0 8px;
+      white-space: nowrap;
+    }
+
+    .advance-btn.active {
+      color: #06111e;
+      background: linear-gradient(90deg, var(--yellow), var(--orange));
+      border-color: transparent;
+      font-weight: 900;
+    }
+
+    .venue {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      min-width: 140px;
+    }
+
+    .empty {
+      display: none;
+      padding: 30px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      margin-top: 12px;
+    }
+
+    footer {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    footer a {
+      color: #bfe9ff;
+    }
+
+    @media (max-width: 980px) {
+      header {
+        grid-template-columns: 1fr;
+      }
+      .actions {
+        justify-content: flex-start;
+      }
+      .summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .share-panel {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .share-url-field {
+        grid-column: 1 / -1;
+      }
+      .bracket-head {
+        display: grid;
+      }
+      .filters {
+        grid-template-columns: 1fr 1fr;
+      }
+      thead th {
+        top: 154px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 18px, 1480px);
+      }
+      .summary, .filters, .share-panel {
+        grid-template-columns: 1fr;
+      }
+      .share-url-field {
+        grid-column: auto;
+      }
+      thead th {
+        top: 292px;
+      }
+      .tool-btn {
+        flex: 1;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: #111;
+      }
+      .filters, .actions, .share-panel, footer {
+        display: none;
+      }
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+      header {
+        border-bottom: 2px solid #111;
+      }
+      .table-wrap {
+        border: 0;
+        box-shadow: none;
+      }
+      table {
+        min-width: 0;
+        font-size: 11px;
+      }
+      thead th {
+        position: static;
+        background: #eee;
+        color: #111;
+      }
+      tbody tr, tbody tr:nth-child(even), tbody tr.done {
+        background: white;
+      }
+      tbody td {
+        border-bottom: 1px solid #ddd;
+      }
+      .en, .venue, .sub, .stat span, .team-stats {
+        color: #555;
+      }
+      .note, .choice, .score {
+        border-color: #aaa;
+        color: #111;
+        background: white;
+      }
+      .bracket-panel {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div>
+        <h1><span class="headline-gradient">Pony 的 2026 世界杯</span><br>胜平负预测表</h1>
+        <p class="sub">全部 104 场：已完赛显示实际比分；小组赛按当前预测算积分晋级，淘汰赛会继续自动刷出下一轮。</p>
+      </div>
+      <div class="actions">
+        <button class="tool-btn" id="printBtn" type="button">打印</button>
+        <button class="tool-btn" id="exportBtn" type="button">导出 CSV</button>
+        <button class="tool-btn" id="clearBtn" type="button">清空预测</button>
+      </div>
+    </header>
+
+    <section class="summary" aria-label="填写进度">
+      <div class="stat"><strong id="totalCount">104</strong><span>全部比赛</span></div>
+      <div class="stat"><strong id="doneCount">12</strong><span>已显示实际结果</span></div>
+      <div class="stat"><strong id="todoCount">92</strong><span>可填写预测</span></div>
+      <div class="stat"><strong id="savedCount">0</strong><span>已保存预测</span></div>
+    </section>
+
+    <section class="share-panel" aria-label="签名和分享">
+      <div class="share-field">
+        <label for="participantName">签名位</label>
+        <input id="participantName" type="text" maxlength="24" placeholder="写上你的名字">
+      </div>
+      <button class="tool-btn" id="saveSignedBtn" type="button">保存签名</button>
+      <button class="tool-btn" id="shareLinkBtn" type="button">生成我的预测链接</button>
+      <div class="share-field share-url-field">
+        <label for="shareUrl">可分享保存网址</label>
+        <input id="shareUrl" readonly placeholder="生成后这里会出现链接">
+      </div>
+      <button class="tool-btn" id="copyShareBtn" type="button">复制链接</button>
+    </section>
+
+    <section class="filters" aria-label="筛选">
+      <div class="field">
+        <label for="search">搜索球队 / 场馆</label>
+        <input id="search" type="search" placeholder="例如：巴西 / Brazil / Final">
+      </div>
+      <div class="field">
+        <label for="stageFilter">阶段</label>
+        <select id="stageFilter">
+          <option value="all">全部阶段</option>
+          <option value="小组赛">小组赛</option>
+          <option value="32强赛">32强赛</option>
+          <option value="16强赛">16强赛</option>
+          <option value="1/4决赛">1/4决赛</option>
+          <option value="半决赛">半决赛</option>
+          <option value="三四名决赛">三四名决赛</option>
+          <option value="决赛">决赛</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="groupFilter">小组</label>
+        <select id="groupFilter">
+          <option value="all">全部小组</option>
+          <option value="A">A 组</option><option value="B">B 组</option><option value="C">C 组</option>
+          <option value="D">D 组</option><option value="E">E 组</option><option value="F">F 组</option>
+          <option value="G">G 组</option><option value="H">H 组</option><option value="I">I 组</option>
+          <option value="J">J 组</option><option value="K">K 组</option><option value="L">L 组</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="statusFilter">状态</label>
+        <select id="statusFilter">
+          <option value="all">全部状态</option>
+          <option value="done">已完赛</option>
+          <option value="todo">待预测</option>
+          <option value="filled">已填写</option>
+          <option value="blank">未填写</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="bracket-panel" aria-label="32强淘汰赛对阵图">
+      <div class="bracket-head">
+        <h2>32强淘汰赛上下半区</h2>
+        <p>根据当前小组赛预测自动生成；淘汰赛胜者会继续流向下一轮。</p>
+      </div>
+      <div class="bracket-scroll">
+        <div class="bracket-map" id="bracketView"></div>
+      </div>
+    </section>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>场次</th>
+            <th>日期</th>
+            <th>阶段</th>
+            <th>左队</th>
+            <th>比分</th>
+            <th>右队</th>
+            <th>结果 / 我的预测</th>
+            <th>地点</th>
+          </tr>
+        </thead>
+        <tbody id="matchBody"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="emptyState">当前筛选没有比赛。</div>
+
+    <footer>
+      数据口径：2026-06-15 创建；已完赛比分按公开赛程/结果页更新至 2026-06-14 当地赛程结束。FIFA 排名采用 <a href="https://inside.fifa.com/fifa-world-ranking/men" target="_blank" rel="noreferrer">2026-06-11 男足世界排名</a>；球队总身价为欧元口径，前 10 参考 <a href="https://as.com/futbol/mundial/ni-espana-ni-inglaterra-esta-es-la-seleccion-mas-valiosa-de-todo-el-mundial-2026-f202606-n/" target="_blank" rel="noreferrer">AS / Transfermarkt 汇总</a>，其余队伍先用参考估算，方便后续替换。小组赛预测按胜 3 分、平 1 分、负 0 分推演；淘汰赛若选平，需要再选择点球晋级队。
+    </footer>
+  </main>
+
+  <script>
+    const STORE_KEY = "pony-world-cup-2026-predictions-v1";
+    const PARTICIPANT_KEY = "pony-world-cup-2026-participant-v1";
+
+    const teams = {
+      MEX:["🇲🇽","墨西哥","Mexico"], RSA:["🇿🇦","南非","South Africa"], KOR:["🇰🇷","韩国","South Korea"], CZE:["🇨🇿","捷克","Czech Republic"],
+      CAN:["🇨🇦","加拿大","Canada"], BIH:["🇧🇦","波黑","Bosnia and Herzegovina"], QAT:["🇶🇦","卡塔尔","Qatar"], SUI:["🇨🇭","瑞士","Switzerland"],
+      BRA:["🇧🇷","巴西","Brazil"], MAR:["🇲🇦","摩洛哥","Morocco"], HAI:["🇭🇹","海地","Haiti"], SCO:["\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}","苏格兰","Scotland"],
+      USA:["🇺🇸","美国","United States"], PAR:["🇵🇾","巴拉圭","Paraguay"], AUS:["🇦🇺","澳大利亚","Australia"], TUR:["🇹🇷","土耳其","Türkiye"],
+      GER:["🇩🇪","德国","Germany"], CUW:["🇨🇼","库拉索","Curaçao"], CIV:["🇨🇮","科特迪瓦","Côte d'Ivoire"], ECU:["🇪🇨","厄瓜多尔","Ecuador"],
+      NED:["🇳🇱","荷兰","Netherlands"], JPN:["🇯🇵","日本","Japan"], SWE:["🇸🇪","瑞典","Sweden"], TUN:["🇹🇳","突尼斯","Tunisia"],
+      BEL:["🇧🇪","比利时","Belgium"], EGY:["🇪🇬","埃及","Egypt"], IRN:["🇮🇷","伊朗","IR Iran"], NZL:["🇳🇿","新西兰","New Zealand"],
+      ESP:["🇪🇸","西班牙","Spain"], CPV:["🇨🇻","佛得角","Cape Verde"], KSA:["🇸🇦","沙特阿拉伯","Saudi Arabia"], URU:["🇺🇾","乌拉圭","Uruguay"],
+      FRA:["🇫🇷","法国","France"], SEN:["🇸🇳","塞内加尔","Senegal"], IRQ:["🇮🇶","伊拉克","Iraq"], NOR:["🇳🇴","挪威","Norway"],
+      ARG:["🇦🇷","阿根廷","Argentina"], ALG:["🇩🇿","阿尔及利亚","Algeria"], AUT:["🇦🇹","奥地利","Austria"], JOR:["🇯🇴","约旦","Jordan"],
+      POR:["🇵🇹","葡萄牙","Portugal"], COD:["🇨🇩","刚果民主共和国","DR Congo"], UZB:["🇺🇿","乌兹别克斯坦","Uzbekistan"], COL:["🇨🇴","哥伦比亚","Colombia"],
+      ENG:["\u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}","英格兰","England"], CRO:["🇭🇷","克罗地亚","Croatia"], GHA:["🇬🇭","加纳","Ghana"], PAN:["🇵🇦","巴拿马","Panama"]
+    };
+
+    const teamStats = {
+      MEX:{rank:14,value:"€190M"}, RSA:{rank:60,value:"€65M"}, KOR:{rank:25,value:"€145M"}, CZE:{rank:40,value:"€100M"},
+      CAN:{rank:30,value:"€185M"}, BIH:{rank:64,value:"€75M"}, QAT:{rank:56,value:"€75M"}, SUI:{rank:19,value:"€235M"},
+      BRA:{rank:6,value:"€912M"}, MAR:{rank:7,value:"€350M"}, HAI:{rank:83,value:"€25M"}, SCO:{rank:42,value:"€105M"},
+      USA:{rank:17,value:"€320M"}, PAR:{rank:41,value:"€155M"}, AUS:{rank:27,value:"€110M"}, TUR:{rank:22,value:"€285M"},
+      GER:{rank:10,value:"€998M"}, CUW:{rank:82,value:"€22M"}, CIV:{rank:33,value:"€245M"}, ECU:{rank:23,value:"€200M"},
+      NED:{rank:8,value:"€837.2M"}, JPN:{rank:18,value:"€220M"}, SWE:{rank:38,value:"€210M"}, TUN:{rank:45,value:"€50M"},
+      BEL:{rank:9,value:"€542.9M"}, EGY:{rank:29,value:"€90M"}, IRN:{rank:20,value:"€95M"}, NZL:{rank:85,value:"€28M"},
+      ESP:{rank:2,value:"€1.260B"}, CPV:{rank:67,value:"€30M"}, KSA:{rank:61,value:"€85M"}, URU:{rank:16,value:"€485M"},
+      FRA:{rank:3,value:"€1.533B"}, SEN:{rank:15,value:"€260M"}, IRQ:{rank:57,value:"€35M"}, NOR:{rank:31,value:"€601M"},
+      ARG:{rank:1,value:"€817.5M"}, ALG:{rank:28,value:"€165M"}, AUT:{rank:24,value:"€230M"}, JOR:{rank:63,value:"€32M"},
+      POR:{rank:5,value:"€1.020B"}, COD:{rank:46,value:"€45M"}, UZB:{rank:50,value:"€45M"}, COL:{rank:13,value:"€360M"},
+      ENG:{rank:4,value:"€1.310B"}, CRO:{rank:11,value:"€300M"}, GHA:{rank:73,value:"€175M"}, PAN:{rank:34,value:"€55M"}
+    };
+
+    const matches = [
+      {no:1,date:"2026-06-11",stage:"小组赛",group:"A",a:"MEX",b:"RSA",score:"2-0",venue:"Estadio Azteca, Mexico City"},
+      {no:2,date:"2026-06-11",stage:"小组赛",group:"A",a:"KOR",b:"CZE",score:"2-1",venue:"Estadio Akron, Guadalajara"},
+      {no:3,date:"2026-06-12",stage:"小组赛",group:"B",a:"CAN",b:"BIH",score:"1-1",venue:"BMO Field, Toronto"},
+      {no:4,date:"2026-06-12",stage:"小组赛",group:"D",a:"USA",b:"PAR",score:"4-1",venue:"SoFi Stadium, Los Angeles"},
+      {no:5,date:"2026-06-13",stage:"小组赛",group:"B",a:"QAT",b:"SUI",score:"1-1",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:6,date:"2026-06-13",stage:"小组赛",group:"C",a:"BRA",b:"MAR",score:"1-1",venue:"MetLife Stadium, New York New Jersey"},
+      {no:7,date:"2026-06-13",stage:"小组赛",group:"C",a:"HAI",b:"SCO",score:"0-1",venue:"Gillette Stadium, Boston"},
+      {no:8,date:"2026-06-13",stage:"小组赛",group:"D",a:"AUS",b:"TUR",score:"2-0",venue:"BC Place, Vancouver"},
+      {no:9,date:"2026-06-14",stage:"小组赛",group:"E",a:"GER",b:"CUW",score:"7-1",venue:"NRG Stadium, Houston"},
+      {no:10,date:"2026-06-14",stage:"小组赛",group:"F",a:"NED",b:"JPN",score:"2-2",venue:"AT&T Stadium, Dallas"},
+      {no:11,date:"2026-06-14",stage:"小组赛",group:"E",a:"CIV",b:"ECU",score:"1-0",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:12,date:"2026-06-14",stage:"小组赛",group:"F",a:"SWE",b:"TUN",score:"5-1",venue:"Estadio BBVA, Monterrey"},
+      {no:13,date:"2026-06-15",stage:"小组赛",group:"H",a:"KSA",b:"URU",venue:"Hard Rock Stadium, Miami"},
+      {no:14,date:"2026-06-15",stage:"小组赛",group:"H",a:"ESP",b:"CPV",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:15,date:"2026-06-15",stage:"小组赛",group:"G",a:"IRN",b:"NZL",venue:"SoFi Stadium, Los Angeles"},
+      {no:16,date:"2026-06-15",stage:"小组赛",group:"G",a:"BEL",b:"EGY",venue:"Lumen Field, Seattle"},
+      {no:17,date:"2026-06-16",stage:"小组赛",group:"I",a:"FRA",b:"SEN",venue:"MetLife Stadium, New York New Jersey"},
+      {no:18,date:"2026-06-16",stage:"小组赛",group:"I",a:"IRQ",b:"NOR",venue:"Gillette Stadium, Boston"},
+      {no:19,date:"2026-06-16",stage:"小组赛",group:"J",a:"ARG",b:"ALG",venue:"Arrowhead Stadium, Kansas City"},
+      {no:20,date:"2026-06-16",stage:"小组赛",group:"J",a:"AUT",b:"JOR",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:21,date:"2026-06-17",stage:"小组赛",group:"L",a:"GHA",b:"PAN",venue:"BMO Field, Toronto"},
+      {no:22,date:"2026-06-17",stage:"小组赛",group:"L",a:"ENG",b:"CRO",venue:"AT&T Stadium, Dallas"},
+      {no:23,date:"2026-06-17",stage:"小组赛",group:"K",a:"POR",b:"COD",venue:"NRG Stadium, Houston"},
+      {no:24,date:"2026-06-17",stage:"小组赛",group:"K",a:"UZB",b:"COL",venue:"Estadio Azteca, Mexico City"},
+      {no:25,date:"2026-06-18",stage:"小组赛",group:"A",a:"CZE",b:"RSA",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:26,date:"2026-06-18",stage:"小组赛",group:"B",a:"SUI",b:"BIH",venue:"SoFi Stadium, Los Angeles"},
+      {no:27,date:"2026-06-18",stage:"小组赛",group:"B",a:"CAN",b:"QAT",venue:"BC Place, Vancouver"},
+      {no:28,date:"2026-06-18",stage:"小组赛",group:"A",a:"MEX",b:"KOR",venue:"Estadio Akron, Guadalajara"},
+      {no:29,date:"2026-06-19",stage:"小组赛",group:"C",a:"BRA",b:"HAI",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:30,date:"2026-06-19",stage:"小组赛",group:"C",a:"SCO",b:"MAR",venue:"Gillette Stadium, Boston"},
+      {no:31,date:"2026-06-19",stage:"小组赛",group:"D",a:"TUR",b:"PAR",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:32,date:"2026-06-19",stage:"小组赛",group:"D",a:"USA",b:"AUS",venue:"Lumen Field, Seattle"},
+      {no:33,date:"2026-06-20",stage:"小组赛",group:"E",a:"GER",b:"CIV",venue:"BMO Field, Toronto"},
+      {no:34,date:"2026-06-20",stage:"小组赛",group:"E",a:"ECU",b:"CUW",venue:"Arrowhead Stadium, Kansas City"},
+      {no:35,date:"2026-06-20",stage:"小组赛",group:"F",a:"NED",b:"SWE",venue:"NRG Stadium, Houston"},
+      {no:36,date:"2026-06-20",stage:"小组赛",group:"F",a:"TUN",b:"JPN",venue:"Estadio BBVA, Monterrey"},
+      {no:37,date:"2026-06-21",stage:"小组赛",group:"H",a:"URU",b:"CPV",venue:"Hard Rock Stadium, Miami"},
+      {no:38,date:"2026-06-21",stage:"小组赛",group:"H",a:"ESP",b:"KSA",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:39,date:"2026-06-21",stage:"小组赛",group:"G",a:"BEL",b:"IRN",venue:"SoFi Stadium, Los Angeles"},
+      {no:40,date:"2026-06-21",stage:"小组赛",group:"G",a:"NZL",b:"EGY",venue:"BC Place, Vancouver"},
+      {no:41,date:"2026-06-22",stage:"小组赛",group:"I",a:"NOR",b:"SEN",venue:"MetLife Stadium, New York New Jersey"},
+      {no:42,date:"2026-06-22",stage:"小组赛",group:"I",a:"FRA",b:"IRQ",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:43,date:"2026-06-22",stage:"小组赛",group:"J",a:"ARG",b:"AUT",venue:"AT&T Stadium, Dallas"},
+      {no:44,date:"2026-06-22",stage:"小组赛",group:"J",a:"JOR",b:"ALG",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:45,date:"2026-06-23",stage:"小组赛",group:"L",a:"ENG",b:"GHA",venue:"Gillette Stadium, Boston"},
+      {no:46,date:"2026-06-23",stage:"小组赛",group:"L",a:"PAN",b:"CRO",venue:"BMO Field, Toronto"},
+      {no:47,date:"2026-06-23",stage:"小组赛",group:"K",a:"POR",b:"UZB",venue:"NRG Stadium, Houston"},
+      {no:48,date:"2026-06-23",stage:"小组赛",group:"K",a:"COL",b:"COD",venue:"Estadio Akron, Guadalajara"},
+      {no:49,date:"2026-06-24",stage:"小组赛",group:"C",a:"SCO",b:"BRA",venue:"Hard Rock Stadium, Miami"},
+      {no:50,date:"2026-06-24",stage:"小组赛",group:"C",a:"MAR",b:"HAI",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:51,date:"2026-06-24",stage:"小组赛",group:"B",a:"SUI",b:"CAN",venue:"BC Place, Vancouver"},
+      {no:52,date:"2026-06-24",stage:"小组赛",group:"B",a:"BIH",b:"QAT",venue:"Lumen Field, Seattle"},
+      {no:53,date:"2026-06-24",stage:"小组赛",group:"A",a:"CZE",b:"MEX",venue:"Estadio Azteca, Mexico City"},
+      {no:54,date:"2026-06-24",stage:"小组赛",group:"A",a:"RSA",b:"KOR",venue:"Estadio BBVA, Monterrey"},
+      {no:55,date:"2026-06-25",stage:"小组赛",group:"E",a:"CUW",b:"CIV",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:56,date:"2026-06-25",stage:"小组赛",group:"E",a:"ECU",b:"GER",venue:"MetLife Stadium, New York New Jersey"},
+      {no:57,date:"2026-06-25",stage:"小组赛",group:"F",a:"JPN",b:"SWE",venue:"AT&T Stadium, Dallas"},
+      {no:58,date:"2026-06-25",stage:"小组赛",group:"F",a:"TUN",b:"NED",venue:"Arrowhead Stadium, Kansas City"},
+      {no:59,date:"2026-06-25",stage:"小组赛",group:"D",a:"TUR",b:"USA",venue:"SoFi Stadium, Los Angeles"},
+      {no:60,date:"2026-06-25",stage:"小组赛",group:"D",a:"PAR",b:"AUS",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:61,date:"2026-06-26",stage:"小组赛",group:"I",a:"NOR",b:"FRA",venue:"Gillette Stadium, Boston"},
+      {no:62,date:"2026-06-26",stage:"小组赛",group:"I",a:"SEN",b:"IRQ",venue:"BMO Field, Toronto"},
+      {no:63,date:"2026-06-26",stage:"小组赛",group:"G",a:"EGY",b:"IRN",venue:"Lumen Field, Seattle"},
+      {no:64,date:"2026-06-26",stage:"小组赛",group:"G",a:"NZL",b:"BEL",venue:"BC Place, Vancouver"},
+      {no:65,date:"2026-06-26",stage:"小组赛",group:"H",a:"CPV",b:"KSA",venue:"NRG Stadium, Houston"},
+      {no:66,date:"2026-06-26",stage:"小组赛",group:"H",a:"URU",b:"ESP",venue:"Estadio Akron, Guadalajara"},
+      {no:67,date:"2026-06-27",stage:"小组赛",group:"L",a:"PAN",b:"ENG",venue:"MetLife Stadium, New York New Jersey"},
+      {no:68,date:"2026-06-27",stage:"小组赛",group:"L",a:"CRO",b:"GHA",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:69,date:"2026-06-27",stage:"小组赛",group:"J",a:"ALG",b:"AUT",venue:"Arrowhead Stadium, Kansas City"},
+      {no:70,date:"2026-06-27",stage:"小组赛",group:"J",a:"JOR",b:"ARG",venue:"AT&T Stadium, Dallas"},
+      {no:71,date:"2026-06-27",stage:"小组赛",group:"K",a:"COL",b:"POR",venue:"Hard Rock Stadium, Miami"},
+      {no:72,date:"2026-06-27",stage:"小组赛",group:"K",a:"COD",b:"UZB",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:73,date:"2026-06-28",stage:"32强赛",a:"Runner-up Group A",b:"Runner-up Group B",venue:"SoFi Stadium, Los Angeles"},
+      {no:74,date:"2026-06-29",stage:"32强赛",a:"Winner Group E",b:"3rd Group A/B/C/D/F",venue:"Gillette Stadium, Boston"},
+      {no:75,date:"2026-06-29",stage:"32强赛",a:"Winner Group F",b:"Runner-up Group C",venue:"Estadio BBVA, Monterrey"},
+      {no:76,date:"2026-06-29",stage:"32强赛",a:"Winner Group C",b:"Runner-up Group F",venue:"NRG Stadium, Houston"},
+      {no:77,date:"2026-06-30",stage:"32强赛",a:"Winner Group I",b:"3rd Group C/D/F/G/H",venue:"MetLife Stadium, New York New Jersey"},
+      {no:78,date:"2026-06-30",stage:"32强赛",a:"Runner-up Group E",b:"Runner-up Group I",venue:"AT&T Stadium, Dallas"},
+      {no:79,date:"2026-06-30",stage:"32强赛",a:"Winner Group A",b:"3rd Group C/E/F/H/I",venue:"Estadio Azteca, Mexico City"},
+      {no:80,date:"2026-07-01",stage:"32强赛",a:"Winner Group L",b:"3rd Group E/H/I/J/K",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:81,date:"2026-07-01",stage:"32强赛",a:"Winner Group D",b:"3rd Group B/E/F/I/J",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:82,date:"2026-07-01",stage:"32强赛",a:"Winner Group G",b:"3rd Group A/E/H/I/J",venue:"Lumen Field, Seattle"},
+      {no:83,date:"2026-07-02",stage:"32强赛",a:"Runner-up Group K",b:"Runner-up Group L",venue:"BMO Field, Toronto"},
+      {no:84,date:"2026-07-02",stage:"32强赛",a:"Winner Group H",b:"Runner-up Group J",venue:"SoFi Stadium, Los Angeles"},
+      {no:85,date:"2026-07-02",stage:"32强赛",a:"Winner Group B",b:"3rd Group E/F/G/I/J",venue:"BC Place, Vancouver"},
+      {no:86,date:"2026-07-03",stage:"32强赛",a:"Winner Group J",b:"Runner-up Group H",venue:"Hard Rock Stadium, Miami"},
+      {no:87,date:"2026-07-03",stage:"32强赛",a:"Winner Group K",b:"3rd Group D/E/I/J/L",venue:"Arrowhead Stadium, Kansas City"},
+      {no:88,date:"2026-07-03",stage:"32强赛",a:"Runner-up Group D",b:"Runner-up Group G",venue:"AT&T Stadium, Dallas"},
+      {no:89,date:"2026-07-04",stage:"16强赛",a:"Winner Match 74",b:"Winner Match 77",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:90,date:"2026-07-04",stage:"16强赛",a:"Winner Match 73",b:"Winner Match 75",venue:"NRG Stadium, Houston"},
+      {no:91,date:"2026-07-05",stage:"16强赛",a:"Winner Match 76",b:"Winner Match 78",venue:"MetLife Stadium, New York New Jersey"},
+      {no:92,date:"2026-07-05",stage:"16强赛",a:"Winner Match 79",b:"Winner Match 80",venue:"Estadio Azteca, Mexico City"},
+      {no:93,date:"2026-07-06",stage:"16强赛",a:"Winner Match 83",b:"Winner Match 84",venue:"AT&T Stadium, Dallas"},
+      {no:94,date:"2026-07-06",stage:"16强赛",a:"Winner Match 81",b:"Winner Match 82",venue:"Lumen Field, Seattle"},
+      {no:95,date:"2026-07-07",stage:"16强赛",a:"Winner Match 86",b:"Winner Match 88",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:96,date:"2026-07-07",stage:"16强赛",a:"Winner Match 85",b:"Winner Match 87",venue:"BC Place, Vancouver"},
+      {no:97,date:"2026-07-09",stage:"1/4决赛",a:"Winner Match 89",b:"Winner Match 90",venue:"Gillette Stadium, Boston"},
+      {no:98,date:"2026-07-10",stage:"1/4决赛",a:"Winner Match 93",b:"Winner Match 94",venue:"SoFi Stadium, Los Angeles"},
+      {no:99,date:"2026-07-11",stage:"1/4决赛",a:"Winner Match 91",b:"Winner Match 92",venue:"Hard Rock Stadium, Miami"},
+      {no:100,date:"2026-07-11",stage:"1/4决赛",a:"Winner Match 95",b:"Winner Match 96",venue:"Arrowhead Stadium, Kansas City"},
+      {no:101,date:"2026-07-14",stage:"半决赛",a:"Winner Match 97",b:"Winner Match 98",venue:"AT&T Stadium, Dallas"},
+      {no:102,date:"2026-07-15",stage:"半决赛",a:"Winner Match 99",b:"Winner Match 100",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:103,date:"2026-07-18",stage:"三四名决赛",a:"Loser Match 101",b:"Loser Match 102",venue:"Hard Rock Stadium, Miami"},
+      {no:104,date:"2026-07-19",stage:"决赛",a:"Winner Match 101",b:"Winner Match 102",venue:"MetLife Stadium, New York New Jersey"}
+    ];
+
+    const els = {
+      body: document.getElementById("matchBody"),
+      search: document.getElementById("search"),
+      stage: document.getElementById("stageFilter"),
+      group: document.getElementById("groupFilter"),
+      status: document.getElementById("statusFilter"),
+      empty: document.getElementById("emptyState"),
+      total: document.getElementById("totalCount"),
+      done: document.getElementById("doneCount"),
+      todo: document.getElementById("todoCount"),
+      saved: document.getElementById("savedCount"),
+      bracket: document.getElementById("bracketView"),
+      participant: document.getElementById("participantName"),
+      saveSigned: document.getElementById("saveSignedBtn"),
+      shareLink: document.getElementById("shareLinkBtn"),
+      shareUrl: document.getElementById("shareUrl"),
+      copyShare: document.getElementById("copyShareBtn"),
+      print: document.getElementById("printBtn"),
+      export: document.getElementById("exportBtn"),
+      clear: document.getElementById("clearBtn")
+    };
+
+    const bracketHalves = [
+      {
+        label: "上半区",
+        tone: "top",
+        rounds: [
+          { label: "32强", hint: "8 场", count: 8, matches: [74, 77, 73, 75, 83, 84, 81, 82] },
+          { label: "16强", hint: "4 场", count: 4, matches: [89, 90, 93, 94] },
+          { label: "1/4决赛", hint: "2 场", count: 2, matches: [97, 98] },
+          { label: "半决赛", hint: "1 场", count: 1, matches: [101] }
+        ]
+      },
+      {
+        label: "下半区",
+        tone: "bottom",
+        rounds: [
+          { label: "32强", hint: "8 场", count: 8, matches: [76, 78, 79, 80, 86, 88, 85, 87] },
+          { label: "16强", hint: "4 场", count: 4, matches: [91, 92, 95, 96] },
+          { label: "1/4决赛", hint: "2 场", count: 2, matches: [99, 100] },
+          { label: "半决赛", hint: "1 场", count: 1, matches: [102] }
+        ]
+      }
+    ];
+
+    const groupLetters = "ABCDEFGHIJKL".split("");
+    const thirdSlotOrder = [74, 77, 79, 80, 81, 82, 85, 87];
+    const thirdSlotRules = {
+      74:["A","B","C","D","F"],
+      77:["C","D","F","G","H"],
+      79:["C","E","F","H","I"],
+      80:["E","H","I","J","K"],
+      81:["B","E","F","I","J"],
+      82:["A","E","H","I","J"],
+      85:["E","F","G","I","J"],
+      87:["D","E","I","J","L"]
+    };
+
+    let participantName = readParticipant();
+    let saved = readSaved();
+    applySharedStateFromHash();
+
+    function readSaved() {
+      try {
+        return JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function readParticipant() {
+      return localStorage.getItem(PARTICIPANT_KEY) || "";
+    }
+
+    function writeParticipant() {
+      participantName = (els.participant.value || "").trim();
+      localStorage.setItem(PARTICIPANT_KEY, participantName);
+    }
+
+    function writeSaved() {
+      localStorage.setItem(STORE_KEY, JSON.stringify(saved));
+      updateStats();
+      if (els.shareUrl.value) els.shareUrl.value = currentShareURL();
+    }
+
+    function cleanSharedSaved(input) {
+      const output = {};
+      Object.entries(input || {}).forEach(([no, row]) => {
+        if (!/^\d+$/.test(no) || !row || typeof row !== "object") return;
+        const clean = {};
+        if (["left", "draw", "right"].includes(row.pick)) clean.pick = row.pick;
+        if (["left", "right"].includes(row.advance)) clean.advance = row.advance;
+        if (typeof row.note === "string") clean.note = row.note.slice(0, 120);
+        if (Object.keys(clean).length) output[no] = clean;
+      });
+      return output;
+    }
+
+    function encodeSharedState(payload) {
+      const bytes = new TextEncoder().encode(JSON.stringify(payload));
+      let binary = "";
+      bytes.forEach(byte => binary += String.fromCharCode(byte));
+      return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/g, "");
+    }
+
+    function decodeSharedState(token) {
+      let base64 = String(token || "").replaceAll("-", "+").replaceAll("_", "/");
+      while (base64.length % 4) base64 += "=";
+      const binary = atob(base64);
+      const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+      return JSON.parse(new TextDecoder().decode(bytes));
+    }
+
+    function applySharedStateFromHash() {
+      const params = new URLSearchParams(location.hash.replace(/^#/, ""));
+      const encoded = params.get("p");
+      if (!encoded) return;
+      try {
+        const payload = decodeSharedState(encoded);
+        if (payload.saved && typeof payload.saved === "object") {
+          saved = cleanSharedSaved(payload.saved);
+          localStorage.setItem(STORE_KEY, JSON.stringify(saved));
+        }
+        if (typeof payload.name === "string") {
+          participantName = payload.name.slice(0, 24);
+          localStorage.setItem(PARTICIPANT_KEY, participantName);
+        }
+      } catch {
+        location.hash = "";
+      }
+    }
+
+    function currentShareURL() {
+      return `${location.href.split("#")[0]}#p=${encodeSharedState({name: participantName, saved})}`;
+    }
+
+    function refreshShareURL(updateHash = false) {
+      writeParticipant();
+      const url = currentShareURL();
+      els.shareUrl.value = url;
+      if (updateHash) history.replaceState(null, "", `#p=${url.split("#p=")[1]}`);
+      return url;
+    }
+
+    function flashButton(button, text, fallback) {
+      const label = fallback || button.dataset.label || button.textContent;
+      button.dataset.label = label;
+      button.textContent = text;
+      clearTimeout(button._flashTimer);
+      button._flashTimer = setTimeout(() => {
+        button.textContent = label;
+      }, 1300);
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function translateSlot(value) {
+      const text = String(value);
+      let match = text.match(/^Winner Group ([A-L])$/);
+      if (match) return `${match[1]}组第一`;
+      match = text.match(/^Runner-up Group ([A-L])$/);
+      if (match) return `${match[1]}组第二`;
+      match = text.match(/^3rd Group ([A-L/]+)$/);
+      if (match) return `${match[1]}组第三名之一`;
+      match = text.match(/^Winner Match (\d+)$/);
+      if (match) return `第${match[1]}场胜者`;
+      match = text.match(/^Loser Match (\d+)$/);
+      if (match) return `第${match[1]}场负者`;
+      return text;
+    }
+
+    function teamData(value) {
+      if (teams[value]) return teams[value];
+      return ["⏳", translateSlot(value), String(value)];
+    }
+
+    function statsHTML(value, compact = false) {
+      const stats = teamStats[value];
+      if (!stats) return "";
+      if (compact) return `<small>FIFA ${stats.rank} · ${escapeHTML(stats.value)}</small>`;
+      return `
+        <span class="team-stats">
+          <span class="stat-pill">FIFA ${stats.rank}</span>
+          <span class="stat-pill value">${escapeHTML(stats.value)}</span>
+        </span>
+      `;
+    }
+
+    function teamHTML(value) {
+      const [flag, cn, en] = teamData(value);
+      return `<div class="team"><span class="flag">${flag}</span><span><span class="cn">${escapeHTML(cn)}</span><span class="en">${escapeHTML(en)}</span>${statsHTML(value)}</span></div>`;
+    }
+
+    function resultFromScore(score) {
+      if (!score) return "";
+      const [left, right] = score.split("-").map(Number);
+      if (left > right) return "左队胜";
+      if (left < right) return "右队胜";
+      return "平";
+    }
+
+    function outcomeFor(match) {
+      if (match.score) {
+        const [aGoals, bGoals] = match.score.split("-").map(Number);
+        const pick = aGoals > bGoals ? "left" : aGoals < bGoals ? "right" : "draw";
+        return { pick, aGoals, bGoals, actual: true };
+      }
+      const pick = saved[match.no]?.pick;
+      if (!pick) return null;
+      if (pick === "left") return { pick, aGoals: 1, bGoals: 0, actual: false };
+      if (pick === "right") return { pick, aGoals: 0, bGoals: 1, actual: false };
+      return { pick, aGoals: 0, bGoals: 0, actual: false };
+    }
+
+    function hasOutcome(match) {
+      return Boolean(match.score || saved[match.no]?.pick);
+    }
+
+    function calculateTournament() {
+      const records = {};
+      const order = {};
+      groupLetters.forEach(group => {
+        records[group] = {};
+        order[group] = [];
+      });
+
+      matches.filter(match => match.stage === "小组赛").forEach(match => {
+        [match.a, match.b].forEach(code => {
+          if (!records[match.group][code]) {
+            records[match.group][code] = { code, group: match.group, played: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0, order: order[match.group].length };
+            order[match.group].push(code);
+          }
+        });
+      });
+
+      matches.filter(match => match.stage === "小组赛").forEach(match => {
+        const outcome = outcomeFor(match);
+        if (!outcome) return;
+        const left = records[match.group][match.a];
+        const right = records[match.group][match.b];
+        left.played += 1;
+        right.played += 1;
+        left.gf += outcome.aGoals;
+        left.ga += outcome.bGoals;
+        right.gf += outcome.bGoals;
+        right.ga += outcome.aGoals;
+        left.gd = left.gf - left.ga;
+        right.gd = right.gf - right.ga;
+        if (outcome.pick === "left") {
+          left.w += 1; right.l += 1; left.pts += 3;
+        } else if (outcome.pick === "right") {
+          right.w += 1; left.l += 1; right.pts += 3;
+        } else {
+          left.d += 1; right.d += 1; left.pts += 1; right.pts += 1;
+        }
+      });
+
+      const groupRanks = {};
+      const groupComplete = {};
+      groupLetters.forEach(group => {
+        groupRanks[group] = Object.values(records[group]).sort(compareRecords);
+        groupComplete[group] = matches
+          .filter(match => match.stage === "小组赛" && match.group === group)
+          .every(hasOutcome);
+      });
+
+      const allGroupComplete = groupLetters.every(group => groupComplete[group]);
+      const thirdAssignments = {};
+      if (allGroupComplete) {
+        const pool = groupLetters
+          .map(group => groupRanks[group][2])
+          .filter(Boolean)
+          .sort(compareRecords)
+          .slice(0, 8)
+          .map(record => ({...record}));
+        thirdSlotOrder.forEach(no => {
+          const allowed = thirdSlotRules[no];
+          const index = pool.findIndex(record => allowed.includes(record.group));
+          const pickIndex = index >= 0 ? index : 0;
+          if (pool[pickIndex]) {
+            thirdAssignments[no] = pool[pickIndex].code;
+            pool.splice(pickIndex, 1);
+          }
+        });
+      }
+
+      return { groupRanks, groupComplete, allGroupComplete, thirdAssignments };
+    }
+
+    function compareRecords(a, b) {
+      return (b.pts - a.pts)
+        || (b.gd - a.gd)
+        || (b.gf - a.gf)
+        || (b.w - a.w)
+        || (a.order - b.order);
+    }
+
+    function knockoutAdvanceSide(match) {
+      const outcome = outcomeFor(match);
+      if (!outcome) return null;
+      if (outcome.pick === "left" || outcome.pick === "right") return outcome.pick;
+      if (match.stage !== "小组赛") return saved[match.no]?.advance || null;
+      return null;
+    }
+
+    function sideFromPreviousMatch(previous, kind) {
+      const winnerSide = knockoutAdvanceSide(previous);
+      if (!winnerSide) return null;
+      const loserSide = winnerSide === "left" ? "right" : "left";
+      const side = kind === "winner" ? winnerSide : loserSide;
+      return side === "left" ? previous.a : previous.b;
+    }
+
+    function resolveSlot(slot, baseMatch, byNo, tournament) {
+      if (teams[slot]) return slot;
+      let match = String(slot).match(/^Winner Group ([A-L])$/);
+      if (match) {
+        const group = match[1];
+        return tournament.groupComplete[group] ? tournament.groupRanks[group][0].code : slot;
+      }
+      match = String(slot).match(/^Runner-up Group ([A-L])$/);
+      if (match) {
+        const group = match[1];
+        return tournament.groupComplete[group] ? tournament.groupRanks[group][1].code : slot;
+      }
+      if (String(slot).startsWith("3rd Group")) {
+        return tournament.thirdAssignments[baseMatch.no] || slot;
+      }
+      match = String(slot).match(/^Winner Match (\d+)$/);
+      if (match) {
+        const previous = byNo.get(Number(match[1]));
+        return previous ? sideFromPreviousMatch(previous, "winner") || slot : slot;
+      }
+      match = String(slot).match(/^Loser Match (\d+)$/);
+      if (match) {
+        const previous = byNo.get(Number(match[1]));
+        return previous ? sideFromPreviousMatch(previous, "loser") || slot : slot;
+      }
+      return slot;
+    }
+
+    function buildResolvedMatches() {
+      const tournament = calculateTournament();
+      const byNo = new Map();
+      const resolved = matches.map(base => {
+        const match = {
+          ...base,
+          sourceA: base.a,
+          sourceB: base.b,
+          a: resolveSlot(base.a, base, byNo, tournament),
+          b: resolveSlot(base.b, base, byNo, tournament)
+        };
+        byNo.set(match.no, match);
+        return match;
+      });
+      return { matches: resolved, tournament };
+    }
+
+    function canPredict(match) {
+      if (match.score) return false;
+      if (match.stage === "小组赛") return true;
+      return Boolean(teams[match.a] && teams[match.b]);
+    }
+
+    function labelFor(match, value) {
+      const a = teamData(match.a)[1];
+      const b = teamData(match.b)[1];
+      if (value === "left") return `${a}胜`;
+      if (value === "right") return `${b}胜`;
+      return "平";
+    }
+
+    function searchable(match) {
+      const a = teamData(match.a).join(" ");
+      const b = teamData(match.b).join(" ");
+      return `${match.no} ${match.date} ${match.stage} ${match.group || ""} ${a} ${b} ${match.venue}`.toLowerCase();
+    }
+
+    function predictionHTML(match) {
+      if (match.score) {
+        return `<span class="actual">实际：${resultFromScore(match.score)}</span>`;
+      }
+      if (!canPredict(match)) {
+        return `<span class="pending">等待晋级队</span>`;
+      }
+      const row = saved[match.no] || {};
+      const choices = ["left", "draw", "right"].map(value => {
+        const active = row.pick === value ? " active" : "";
+        return `<button class="choice${active}" type="button" data-no="${match.no}" data-pick="${value}">${escapeHTML(labelFor(match, value))}</button>`;
+      }).join("");
+      const advance = match.stage !== "小组赛" && row.pick === "draw" ? `
+        <div class="advance">
+          <span>点球晋级</span>
+          <button class="advance-btn${row.advance === "left" ? " active" : ""}" type="button" data-no="${match.no}" data-advance="left">${escapeHTML(teamData(match.a)[1])}</button>
+          <button class="advance-btn${row.advance === "right" ? " active" : ""}" type="button" data-no="${match.no}" data-advance="right">${escapeHTML(teamData(match.b)[1])}</button>
+        </div>
+      ` : "";
+      return `<div class="prediction"><div class="choices">${choices}</div>${advance}<input class="note" data-note="${match.no}" value="${escapeHTML(row.note || "")}" placeholder="可选备注"></div>`;
+    }
+
+    function winnerCode(match) {
+      const side = knockoutAdvanceSide(match);
+      if (!side) return null;
+      return side === "left" ? match.a : match.b;
+    }
+
+    function bracketTeamHTML(value, active = false) {
+      const [flag, cn] = teamData(value);
+      const pending = !teams[value] ? " pending-team" : "";
+      const winner = active ? " active" : "";
+      return `<div class="bracket-team${pending}${winner}"><span class="bracket-flag">${flag}</span><span class="bracket-name">${escapeHTML(cn)}${statsHTML(value, true)}</span></div>`;
+    }
+
+    function bracketCard(match) {
+      const side = knockoutAdvanceSide(match);
+      const ready = canPredict(match) ? " ready" : "";
+      const decided = side ? " decided" : "";
+      const leftActive = side === "left";
+      const rightActive = side === "right";
+      return `
+        <article class="bracket-card${ready}${decided}">
+          <div class="bracket-meta"><span>#${match.no}</span><span>${escapeHTML(match.date.slice(5))}</span></div>
+          ${bracketTeamHTML(match.a, leftActive)}
+          ${bracketTeamHTML(match.b, rightActive)}
+        </article>
+      `;
+    }
+
+    function renderBracket(renderedMatches) {
+      const byNo = new Map(renderedMatches.map(match => [match.no, match]));
+      const halfSections = bracketHalves.map(half => `
+        <section class="bracket-half">
+          <div class="half-label ${half.tone}">${half.label}</div>
+          ${half.rounds.map(round => `
+            <div class="bracket-round">
+              <div class="round-title"><span>${round.label}</span><span>${round.hint}</span></div>
+              <div class="bracket-list count-${round.count}">
+                ${round.matches.map(no => bracketCard(byNo.get(no))).join("")}
+              </div>
+            </div>
+          `).join("")}
+        </section>
+      `);
+      const finalMatch = byNo.get(104);
+      const thirdMatch = byNo.get(103);
+      const champion = winnerCode(finalMatch);
+      els.bracket.innerHTML = `
+        ${halfSections[0]}
+        <section class="final-strip">
+          ${bracketCard(finalMatch)}
+          <div class="champion-card">
+            <div class="champion-title">冠军预测</div>
+            ${champion ? bracketTeamHTML(champion, true) : bracketTeamHTML("Winner Match 104")}
+          </div>
+          ${bracketCard(thirdMatch)}
+        </section>
+        ${halfSections[1]}
+      `;
+    }
+
+    function render() {
+      const built = buildResolvedMatches();
+      const renderedMatches = built.matches;
+      const q = els.search.value.trim().toLowerCase();
+      const stage = els.stage.value;
+      const group = els.group.value;
+      const status = els.status.value;
+
+      const rows = renderedMatches.filter(match => {
+        const isDone = Boolean(match.score);
+        const hasSaved = Boolean(saved[match.no]?.pick);
+        const fillable = canPredict(match);
+        if (q && !searchable(match).includes(q)) return false;
+        if (stage !== "all" && match.stage !== stage) return false;
+        if (group !== "all" && match.group !== group) return false;
+        if (status === "done" && !isDone) return false;
+        if (status === "todo" && (isDone || !fillable)) return false;
+        if (status === "filled" && !hasSaved) return false;
+        if (status === "blank" && (isDone || !fillable || hasSaved)) return false;
+        return true;
+      });
+
+      els.body.innerHTML = rows.map(match => `
+        <tr class="${match.score ? "done" : ""}">
+          <td><span class="match-no">${match.no}</span></td>
+          <td>${escapeHTML(match.date)}</td>
+          <td><span class="stage"><span class="stage-dot"></span>${escapeHTML(match.stage)}${match.group ? ` · ${match.group}组` : ""}</span></td>
+          <td>${teamHTML(match.a)}</td>
+          <td><span class="score ${match.score ? "" : "future"}">${escapeHTML(match.score || "待赛")}</span></td>
+          <td>${teamHTML(match.b)}</td>
+          <td>${predictionHTML(match)}</td>
+          <td><span class="venue">${escapeHTML(match.venue)}</span></td>
+        </tr>
+      `).join("");
+
+      els.empty.style.display = rows.length ? "none" : "block";
+      renderBracket(renderedMatches);
+      bindRowActions();
+      updateStats(renderedMatches);
+    }
+
+    function bindRowActions() {
+      document.querySelectorAll("[data-pick]").forEach(button => {
+        button.addEventListener("click", () => {
+          const no = button.dataset.no;
+          saved[no] = saved[no] || {};
+          saved[no].pick = button.dataset.pick;
+          if (button.dataset.pick !== "draw") delete saved[no].advance;
+          writeSaved();
+          render();
+        });
+      });
+
+      document.querySelectorAll("[data-advance]").forEach(button => {
+        button.addEventListener("click", () => {
+          const no = button.dataset.no;
+          saved[no] = saved[no] || {};
+          saved[no].pick = "draw";
+          saved[no].advance = button.dataset.advance;
+          writeSaved();
+          render();
+        });
+      });
+
+      document.querySelectorAll("[data-note]").forEach(input => {
+        input.addEventListener("input", () => {
+          const no = input.dataset.note;
+          saved[no] = saved[no] || {};
+          saved[no].note = input.value;
+          writeSaved();
+        });
+      });
+    }
+
+    function updateStats(currentMatches = buildResolvedMatches().matches) {
+      const completed = currentMatches.filter(match => match.score).length;
+      const fillable = currentMatches.filter(match => !match.score && canPredict(match)).length;
+      const filled = currentMatches.filter(match => !match.score && canPredict(match) && saved[match.no]?.pick).length;
+      els.total.textContent = currentMatches.length;
+      els.done.textContent = completed;
+      els.todo.textContent = fillable;
+      els.saved.textContent = `${filled}/${fillable}`;
+    }
+
+    function exportCSV() {
+      writeParticipant();
+      const renderedMatches = buildResolvedMatches().matches;
+      const header = ["签名","场次","日期","阶段","小组","左队中文","左队英文","左队FIFA排名","左队总身价","比分","右队中文","右队英文","右队FIFA排名","右队总身价","实际结果","预测","点球晋级","备注","地点"];
+      const lines = [header];
+      renderedMatches.forEach(match => {
+        const left = teamData(match.a);
+        const right = teamData(match.b);
+        const leftStats = teamStats[match.a] || {};
+        const rightStats = teamStats[match.b] || {};
+        const row = saved[match.no] || {};
+        const pick = row.pick ? labelFor(match, row.pick) : "";
+        const advance = row.pick === "draw" && row.advance ? `${teamData(row.advance === "left" ? match.a : match.b)[1]}点球晋级` : "";
+        lines.push([
+          participantName || "",
+          match.no, match.date, match.stage, match.group || "",
+          left[1], left[2], leftStats.rank ? `FIFA ${leftStats.rank}` : "", leftStats.value || "", match.score || "",
+          right[1], right[2], rightStats.rank ? `FIFA ${rightStats.rank}` : "", rightStats.value || "",
+          match.score ? resultFromScore(match.score) : "", pick, advance, row.note || "", match.venue
+        ]);
+      });
+      const csv = lines.map(row => row.map(cell => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
+      const blob = new Blob(["\uFEFF" + csv], {type: "text/csv;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "pony-world-cup-2026-predictions.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    els.participant.value = participantName;
+
+    [els.search, els.stage, els.group, els.status].forEach(el => el.addEventListener("input", render));
+    els.participant.addEventListener("input", () => {
+      writeParticipant();
+      if (els.shareUrl.value) els.shareUrl.value = currentShareURL();
+    });
+    els.saveSigned.addEventListener("click", () => {
+      refreshShareURL(false);
+      flashButton(els.saveSigned, "已保存", "保存签名");
+    });
+    els.shareLink.addEventListener("click", () => {
+      refreshShareURL(true);
+      flashButton(els.shareLink, "已生成", "生成我的预测链接");
+    });
+    els.copyShare.addEventListener("click", async () => {
+      const value = els.shareUrl.value || refreshShareURL(false);
+      let copied = false;
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(value);
+          copied = true;
+        } catch {
+          copied = false;
+        }
+      }
+      if (!copied) {
+        els.shareUrl.focus();
+        els.shareUrl.select();
+        try {
+          copied = document.execCommand("copy");
+        } catch {
+          copied = false;
+        }
+      }
+      flashButton(els.copyShare, copied ? "已复制" : "已选中", "复制链接");
+    });
+    els.shareUrl.addEventListener("focus", () => els.shareUrl.select());
+    els.print.addEventListener("click", () => window.print());
+    els.export.addEventListener("click", exportCSV);
+    els.clear.addEventListener("click", () => {
+      if (!confirm("确定清空当前已填的预测吗？")) return;
+      saved = {};
+      writeSaved();
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
