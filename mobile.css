@@ -1,0 +1,251 @@
+@media (max-width: 760px) {
+  body {
+    background:
+      radial-gradient(circle at 10% 0%, rgba(72, 199, 255, .18), transparent 18rem),
+      radial-gradient(circle at 100% 4%, rgba(255, 93, 158, .14), transparent 16rem),
+      linear-gradient(145deg, #06111e 0%, #0b1a30 58%, #07111f 100%) !important;
+  }
+
+  .page {
+    width: min(100% - 16px, 1480px) !important;
+    padding: 14px 0 30px !important;
+  }
+
+  header {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    padding: 14px 0 16px !important;
+  }
+
+  h1 { font-size: clamp(28px, 9vw, 42px) !important; }
+
+  .sub {
+    margin-top: 10px !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+  }
+
+  .actions {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    gap: 8px !important;
+    justify-content: stretch !important;
+  }
+
+  .tool-btn {
+    width: 100% !important;
+    min-height: 44px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+  }
+
+  .summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin: 12px 0 !important;
+  }
+
+  .stat {
+    min-height: 76px !important;
+    padding: 12px !important;
+  }
+
+  .stat strong {
+    font-size: 26px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .stat span { font-size: 12px !important; }
+
+  .share-panel {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  .share-url-field { grid-column: auto !important; }
+
+  .filters {
+    position: static !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  .field input, .field select, .share-field input { min-height: 44px !important; }
+
+  .bracket-panel { margin-bottom: 12px !important; }
+
+  .bracket-head {
+    display: grid !important;
+    padding: 12px !important;
+  }
+
+  .bracket-head h2 { font-size: 18px !important; }
+  .bracket-head p { line-height: 1.45 !important; }
+
+  .bracket-scroll {
+    overflow-x: visible !important;
+    padding: 10px !important;
+  }
+
+  .bracket-map {
+    min-width: 0 !important;
+    gap: 12px !important;
+  }
+
+  .bracket-half {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .half-label {
+    min-height: 34px !important;
+    writing-mode: horizontal-tb !important;
+  }
+
+  .bracket-round { gap: 8px !important; }
+
+  .bracket-list {
+    height: auto !important;
+    gap: 8px !important;
+  }
+
+  .count-8, .count-4, .count-2, .count-1 { grid-template-rows: none !important; }
+
+  .bracket-card {
+    min-height: 0 !important;
+    padding: 8px !important;
+  }
+
+  .bracket-team { min-height: 36px !important; }
+  .bracket-name { white-space: normal !important; }
+
+  .final-strip {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 10px !important;
+  }
+
+  .champion-card { min-height: 96px !important; }
+
+  .table-wrap {
+    overflow: visible !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  table, thead, tbody, tr, td {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  table {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  thead { display: none !important; }
+
+  tbody tr, tbody tr:nth-child(even), tbody tr.done {
+    margin-bottom: 12px !important;
+    overflow: hidden !important;
+    border: 1px solid var(--line) !important;
+    border-radius: var(--radius) !important;
+    background: rgba(13, 27, 47, .82) !important;
+    box-shadow: 0 12px 28px rgba(0,0,0,.18) !important;
+  }
+
+  tbody tr.done { background: rgba(30, 53, 87, .88) !important; }
+  tbody tr:hover { background: rgba(20, 39, 66, .9) !important; }
+
+  tbody td {
+    display: grid !important;
+    grid-template-columns: 72px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: center !important;
+    padding: 10px 12px !important;
+    border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  }
+
+  tbody td:last-child { border-bottom: 0 !important; }
+
+  tbody td::before {
+    color: var(--muted) !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1.25 !important;
+  }
+
+  tbody td:nth-child(1)::before { content: "场次"; }
+  tbody td:nth-child(2)::before { content: "日期"; }
+  tbody td:nth-child(3)::before { content: "阶段"; }
+  tbody td:nth-child(4)::before { content: "左队"; }
+  tbody td:nth-child(5)::before { content: "比分"; }
+  tbody td:nth-child(6)::before { content: "右队"; }
+  tbody td:nth-child(7)::before { content: "预测"; }
+  tbody td:nth-child(8)::before { content: "地点"; }
+
+  .match-no {
+    min-width: 40px !important;
+    height: 30px !important;
+  }
+
+  .team {
+    min-width: 0 !important;
+    grid-template-columns: 32px 1fr !important;
+    gap: 8px !important;
+  }
+
+  .flag {
+    width: 32px !important;
+    font-size: 26px !important;
+  }
+
+  .cn { font-size: 15px !important; }
+  .team-stats { gap: 4px !important; }
+
+  .stat-pill {
+    min-height: 19px !important;
+    font-size: 10px !important;
+  }
+
+  .score {
+    min-width: 64px !important;
+    height: 34px !important;
+  }
+
+  .prediction { min-width: 0 !important; }
+  .choices { gap: 6px !important; }
+
+  .choice {
+    min-height: 40px !important;
+    padding: 0 6px !important;
+    white-space: normal !important;
+    line-height: 1.15 !important;
+  }
+
+  .advance {
+    grid-template-columns: 1fr !important;
+    align-items: stretch !important;
+  }
+
+  .advance-btn { min-height: 36px !important; }
+  .note { min-height: 40px !important; }
+
+  .actual, .pending {
+    justify-content: center !important;
+    min-height: 36px !important;
+    padding: 0 10px !important;
+    white-space: normal !important;
+  }
+
+  .venue { min-width: 0 !important; }
+  footer { font-size: 12px !important; }
+}
