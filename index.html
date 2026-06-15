@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pony 2026 世界杯胜平负预测表</title>
+  <link rel="stylesheet" href="mobile.css">
   <style>
     :root {
       --bg: #07111f;
@@ -721,6 +722,302 @@
       }
       .tool-btn {
         flex: 1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        background:
+          radial-gradient(circle at 10% 0%, rgba(72, 199, 255, .18), transparent 18rem),
+          radial-gradient(circle at 100% 4%, rgba(255, 93, 158, .14), transparent 16rem),
+          linear-gradient(145deg, #06111e 0%, #0b1a30 58%, #07111f 100%);
+      }
+
+      .page {
+        width: min(100% - 16px, 1480px);
+        padding: 14px 0 30px;
+      }
+
+      header {
+        gap: 14px;
+        padding: 14px 0 16px;
+      }
+
+      h1 {
+        font-size: clamp(28px, 9vw, 42px);
+      }
+
+      .sub {
+        margin-top: 10px;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 100%;
+        gap: 8px;
+      }
+
+      .tool-btn {
+        width: 100%;
+        min-height: 44px;
+        padding: 0 10px;
+        font-size: 13px;
+      }
+
+      .summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin: 12px 0;
+      }
+
+      .stat {
+        min-height: 76px;
+        padding: 12px;
+      }
+
+      .stat strong {
+        font-size: 26px;
+        margin-bottom: 8px;
+      }
+
+      .stat span {
+        font-size: 12px;
+      }
+
+      .share-panel {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .share-url-field {
+        grid-column: auto;
+      }
+
+      .filters {
+        position: static;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 12px;
+        padding: 0;
+        background: transparent;
+        backdrop-filter: none;
+      }
+
+      .field input, .field select, .share-field input {
+        min-height: 44px;
+      }
+
+      .bracket-panel {
+        margin-bottom: 12px;
+      }
+
+      .bracket-head {
+        padding: 12px;
+      }
+
+      .bracket-head h2 {
+        font-size: 18px;
+      }
+
+      .bracket-head p {
+        line-height: 1.45;
+      }
+
+      .bracket-scroll {
+        overflow-x: visible;
+        padding: 10px;
+      }
+
+      .bracket-map {
+        min-width: 0;
+        gap: 12px;
+      }
+
+      .bracket-half {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .half-label {
+        min-height: 34px;
+        writing-mode: horizontal-tb;
+      }
+
+      .bracket-round {
+        gap: 8px;
+      }
+
+      .bracket-list {
+        height: auto;
+        gap: 8px;
+      }
+
+      .count-8, .count-4, .count-2, .count-1 {
+        grid-template-rows: none;
+      }
+
+      .bracket-card {
+        min-height: 0;
+        padding: 8px;
+      }
+
+      .bracket-team {
+        min-height: 36px;
+      }
+
+      .bracket-name {
+        white-space: normal;
+      }
+
+      .final-strip {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .champion-card {
+        min-height: 96px;
+      }
+
+      .table-wrap {
+        overflow: visible;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      table, thead, tbody, tr, td {
+        display: block;
+        width: 100%;
+        min-width: 0;
+      }
+
+      table {
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tbody tr, tbody tr:nth-child(even), tbody tr.done {
+        margin-bottom: 12px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(13, 27, 47, .82);
+        box-shadow: 0 12px 28px rgba(0,0,0,.18);
+      }
+
+      tbody tr.done {
+        background: rgba(30, 53, 87, .88);
+      }
+
+      tbody tr:hover {
+        background: rgba(20, 39, 66, .9);
+      }
+
+      tbody td {
+        display: grid;
+        grid-template-columns: 72px minmax(0, 1fr);
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+      }
+
+      tbody td:last-child {
+        border-bottom: 0;
+      }
+
+      tbody td::before {
+        content: attr(data-label);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.25;
+      }
+
+      .match-no {
+        min-width: 40px;
+        height: 30px;
+      }
+
+      .team {
+        min-width: 0;
+        grid-template-columns: 32px 1fr;
+        gap: 8px;
+      }
+
+      .flag {
+        width: 32px;
+        font-size: 26px;
+      }
+
+      .cn {
+        font-size: 15px;
+      }
+
+      .team-stats {
+        gap: 4px;
+      }
+
+      .stat-pill {
+        min-height: 19px;
+        font-size: 10px;
+      }
+
+      .score {
+        min-width: 64px;
+        height: 34px;
+      }
+
+      .prediction {
+        min-width: 0;
+      }
+
+      .choices {
+        gap: 6px;
+      }
+
+      .choice {
+        min-height: 40px;
+        padding: 0 6px;
+        white-space: normal;
+        line-height: 1.15;
+      }
+
+      .advance {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+      }
+
+      .advance-btn {
+        min-height: 36px;
+      }
+
+      .note {
+        min-height: 40px;
+      }
+
+      .actual, .pending {
+        justify-content: center;
+        min-height: 36px;
+        padding: 0 10px;
+        white-space: normal;
+      }
+
+      .venue {
+        min-width: 0;
+      }
+
+      footer {
+        font-size: 12px;
       }
     }
 
@@ -1513,14 +1810,14 @@
 
       els.body.innerHTML = rows.map(match => `
         <tr class="${match.score ? "done" : ""}">
-          <td><span class="match-no">${match.no}</span></td>
-          <td>${escapeHTML(match.date)}</td>
-          <td><span class="stage"><span class="stage-dot"></span>${escapeHTML(match.stage)}${match.group ? ` · ${match.group}组` : ""}</span></td>
-          <td>${teamHTML(match.a)}</td>
-          <td><span class="score ${match.score ? "" : "future"}">${escapeHTML(match.score || "待赛")}</span></td>
-          <td>${teamHTML(match.b)}</td>
-          <td>${predictionHTML(match)}</td>
-          <td><span class="venue">${escapeHTML(match.venue)}</span></td>
+          <td data-label="场次"><span class="match-no">${match.no}</span></td>
+          <td data-label="日期">${escapeHTML(match.date)}</td>
+          <td data-label="阶段"><span class="stage"><span class="stage-dot"></span>${escapeHTML(match.stage)}${match.group ? ` · ${match.group}组` : ""}</span></td>
+          <td data-label="左队">${teamHTML(match.a)}</td>
+          <td data-label="比分"><span class="score ${match.score ? "" : "future"}">${escapeHTML(match.score || "待赛")}</span></td>
+          <td data-label="右队">${teamHTML(match.b)}</td>
+          <td data-label="预测">${predictionHTML(match)}</td>
+          <td data-label="地点"><span class="venue">${escapeHTML(match.venue)}</span></td>
         </tr>
       `).join("");
 
