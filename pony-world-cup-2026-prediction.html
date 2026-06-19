@@ -126,7 +126,7 @@
 
     .share-panel {
       display: grid;
-      grid-template-columns: minmax(190px, 1fr) auto auto minmax(280px, 1.4fr) auto;
+      grid-template-columns: minmax(190px, 1fr) auto auto auto minmax(280px, 1.4fr) auto;
       gap: 12px;
       align-items: end;
       margin: 0 0 14px;
@@ -162,6 +162,112 @@
 
     .share-field input:focus {
       border-color: var(--blue);
+    }
+
+    .version-panel {
+      display: grid;
+      gap: 12px;
+      margin: 0 0 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(8, 19, 34, .74);
+    }
+
+    .version-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .version-head h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .version-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .version-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 10px;
+    }
+
+    .version-item {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: rgba(16, 33, 58, .68);
+    }
+
+    .version-main {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .version-main strong {
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .version-main span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .version-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .version-metrics span,
+    .prediction-compare,
+    .prediction-meta {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.12);
+      color: #cfe1f7;
+      background: rgba(255,255,255,.06);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .version-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mini-btn {
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: #0a1a2e;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini-btn:hover {
+      border-color: rgba(72, 199, 255, .7);
     }
 
     .filters {
@@ -419,7 +525,7 @@
 
     table {
       width: 100%;
-      min-width: 1120px;
+      min-width: 1240px;
       border-collapse: collapse;
     }
 
@@ -467,6 +573,21 @@
       color: #06111e;
       font-weight: 900;
       background: var(--yellow);
+    }
+
+    .bj-time {
+      display: inline-grid;
+      gap: 2px;
+      min-width: 112px;
+      color: #e6f4ff;
+      font-weight: 850;
+      line-height: 1.2;
+    }
+
+    .bj-time small {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .stage {
@@ -572,6 +693,30 @@
       background: var(--green);
       font-weight: 900;
       white-space: nowrap;
+    }
+
+    .actual-stack {
+      display: grid;
+      gap: 7px;
+      justify-items: start;
+    }
+
+    .prediction-compare.hit {
+      color: #092516;
+      border-color: transparent;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .prediction-compare.miss {
+      color: #2b0b12;
+      border-color: transparent;
+      background: linear-gradient(90deg, var(--pink), var(--yellow));
+    }
+
+    .prediction-compare.none {
+      color: var(--muted);
+      border-style: dashed;
+      background: transparent;
     }
 
     .pending {
@@ -1086,8 +1231,8 @@
 
     <section class="summary" aria-label="填写进度">
       <div class="stat"><strong id="totalCount">104</strong><span>全部比赛</span></div>
-      <div class="stat"><strong id="doneCount">12</strong><span>已显示实际结果</span></div>
-      <div class="stat"><strong id="todoCount">92</strong><span>可填写预测</span></div>
+      <div class="stat"><strong id="doneCount">28</strong><span>已显示实际结果</span></div>
+      <div class="stat"><strong id="todoCount">44</strong><span>可填写预测</span></div>
       <div class="stat"><strong id="savedCount">0</strong><span>已保存预测</span></div>
     </section>
 
@@ -1097,12 +1242,23 @@
         <input id="participantName" type="text" maxlength="24" placeholder="写上你的名字">
       </div>
       <button class="tool-btn" id="saveSignedBtn" type="button">保存签名</button>
+      <button class="tool-btn" id="saveVersionBtn" type="button">保存新版</button>
       <button class="tool-btn" id="shareLinkBtn" type="button">生成我的预测链接</button>
       <div class="share-field share-url-field">
         <label for="shareUrl">可分享保存网址</label>
         <input id="shareUrl" readonly placeholder="生成后这里会出现链接">
       </div>
       <button class="tool-btn" id="copyShareBtn" type="button">复制链接</button>
+    </section>
+
+    <section class="version-panel" aria-label="预测版本记录">
+      <div class="version-head">
+        <div>
+          <h2>预测版本记录</h2>
+          <p id="versionSummary">还没有保存版本。</p>
+        </div>
+      </div>
+      <div class="version-list" id="versionList"></div>
     </section>
 
     <section class="filters" aria-label="筛选">
@@ -1161,6 +1317,7 @@
           <tr>
             <th>场次</th>
             <th>日期</th>
+            <th>北京时间</th>
             <th>阶段</th>
             <th>左队</th>
             <th>比分</th>
@@ -1175,13 +1332,15 @@
     <div class="empty" id="emptyState">当前筛选没有比赛。</div>
 
     <footer>
-      数据口径：2026-06-15 创建；已完赛比分按公开赛程/结果页更新至 2026-06-14 当地赛程结束。FIFA 排名采用 <a href="https://inside.fifa.com/fifa-world-ranking/men" target="_blank" rel="noreferrer">2026-06-11 男足世界排名</a>；球队总身价为欧元口径，前 10 参考 <a href="https://as.com/futbol/mundial/ni-espana-ni-inglaterra-esta-es-la-seleccion-mas-valiosa-de-todo-el-mundial-2026-f202606-n/" target="_blank" rel="noreferrer">AS / Transfermarkt 汇总</a>，其余队伍先用参考估算，方便后续替换。小组赛预测按胜 3 分、平 1 分、负 0 分推演；淘汰赛若选平，需要再选择点球晋级队。
+      数据口径：2026-06-15 创建；已完赛比分按公开赛程/结果页更新至 2026-06-19 北京时间已确认完赛结果。北京时间按 FIFA 公开赛程的当地开球时间换算为 UTC+8。FIFA 排名采用 <a href="https://inside.fifa.com/fifa-world-ranking/men" target="_blank" rel="noreferrer">2026-06-11 男足世界排名</a>；球队总身价为欧元口径，前 10 参考 <a href="https://as.com/futbol/mundial/ni-espana-ni-inglaterra-esta-es-la-seleccion-mas-valiosa-de-todo-el-mundial-2026-f202606-n/" target="_blank" rel="noreferrer">AS / Transfermarkt 汇总</a>，其余队伍先用参考估算，方便后续替换。小组赛预测按胜 3 分、平 1 分、负 0 分推演；淘汰赛预测直接选择晋级队，不设平局选项。
     </footer>
   </main>
 
   <script>
     const STORE_KEY = "pony-world-cup-2026-predictions-v1";
     const PARTICIPANT_KEY = "pony-world-cup-2026-participant-v1";
+    const VERSION_KEY = "pony-world-cup-2026-prediction-versions-v1";
+    const MAX_VERSIONS = 30;
 
     const teams = {
       MEX:["🇲🇽","墨西哥","Mexico"], RSA:["🇿🇦","南非","South Africa"], KOR:["🇰🇷","韩国","South Korea"], CZE:["🇨🇿","捷克","Czech Republic"],
@@ -1214,110 +1373,110 @@
     };
 
     const matches = [
-      {no:1,date:"2026-06-11",stage:"小组赛",group:"A",a:"MEX",b:"RSA",score:"2-0",venue:"Estadio Azteca, Mexico City"},
-      {no:2,date:"2026-06-11",stage:"小组赛",group:"A",a:"KOR",b:"CZE",score:"2-1",venue:"Estadio Akron, Guadalajara"},
-      {no:3,date:"2026-06-12",stage:"小组赛",group:"B",a:"CAN",b:"BIH",score:"1-1",venue:"BMO Field, Toronto"},
-      {no:4,date:"2026-06-12",stage:"小组赛",group:"D",a:"USA",b:"PAR",score:"4-1",venue:"SoFi Stadium, Los Angeles"},
-      {no:5,date:"2026-06-13",stage:"小组赛",group:"B",a:"QAT",b:"SUI",score:"1-1",venue:"Levi's Stadium, San Francisco Bay Area"},
-      {no:6,date:"2026-06-13",stage:"小组赛",group:"C",a:"BRA",b:"MAR",score:"1-1",venue:"MetLife Stadium, New York New Jersey"},
-      {no:7,date:"2026-06-13",stage:"小组赛",group:"C",a:"HAI",b:"SCO",score:"0-1",venue:"Gillette Stadium, Boston"},
-      {no:8,date:"2026-06-13",stage:"小组赛",group:"D",a:"AUS",b:"TUR",score:"2-0",venue:"BC Place, Vancouver"},
-      {no:9,date:"2026-06-14",stage:"小组赛",group:"E",a:"GER",b:"CUW",score:"7-1",venue:"NRG Stadium, Houston"},
-      {no:10,date:"2026-06-14",stage:"小组赛",group:"F",a:"NED",b:"JPN",score:"2-2",venue:"AT&T Stadium, Dallas"},
-      {no:11,date:"2026-06-14",stage:"小组赛",group:"E",a:"CIV",b:"ECU",score:"1-0",venue:"Lincoln Financial Field, Philadelphia"},
-      {no:12,date:"2026-06-14",stage:"小组赛",group:"F",a:"SWE",b:"TUN",score:"5-1",venue:"Estadio BBVA, Monterrey"},
-      {no:13,date:"2026-06-15",stage:"小组赛",group:"H",a:"KSA",b:"URU",venue:"Hard Rock Stadium, Miami"},
-      {no:14,date:"2026-06-15",stage:"小组赛",group:"H",a:"ESP",b:"CPV",venue:"Mercedes-Benz Stadium, Atlanta"},
-      {no:15,date:"2026-06-15",stage:"小组赛",group:"G",a:"IRN",b:"NZL",venue:"SoFi Stadium, Los Angeles"},
-      {no:16,date:"2026-06-15",stage:"小组赛",group:"G",a:"BEL",b:"EGY",venue:"Lumen Field, Seattle"},
-      {no:17,date:"2026-06-16",stage:"小组赛",group:"I",a:"FRA",b:"SEN",venue:"MetLife Stadium, New York New Jersey"},
-      {no:18,date:"2026-06-16",stage:"小组赛",group:"I",a:"IRQ",b:"NOR",venue:"Gillette Stadium, Boston"},
-      {no:19,date:"2026-06-16",stage:"小组赛",group:"J",a:"ARG",b:"ALG",venue:"Arrowhead Stadium, Kansas City"},
-      {no:20,date:"2026-06-16",stage:"小组赛",group:"J",a:"AUT",b:"JOR",venue:"Levi's Stadium, San Francisco Bay Area"},
-      {no:21,date:"2026-06-17",stage:"小组赛",group:"L",a:"GHA",b:"PAN",venue:"BMO Field, Toronto"},
-      {no:22,date:"2026-06-17",stage:"小组赛",group:"L",a:"ENG",b:"CRO",venue:"AT&T Stadium, Dallas"},
-      {no:23,date:"2026-06-17",stage:"小组赛",group:"K",a:"POR",b:"COD",venue:"NRG Stadium, Houston"},
-      {no:24,date:"2026-06-17",stage:"小组赛",group:"K",a:"UZB",b:"COL",venue:"Estadio Azteca, Mexico City"},
-      {no:25,date:"2026-06-18",stage:"小组赛",group:"A",a:"CZE",b:"RSA",venue:"Mercedes-Benz Stadium, Atlanta"},
-      {no:26,date:"2026-06-18",stage:"小组赛",group:"B",a:"SUI",b:"BIH",venue:"SoFi Stadium, Los Angeles"},
-      {no:27,date:"2026-06-18",stage:"小组赛",group:"B",a:"CAN",b:"QAT",venue:"BC Place, Vancouver"},
-      {no:28,date:"2026-06-18",stage:"小组赛",group:"A",a:"MEX",b:"KOR",venue:"Estadio Akron, Guadalajara"},
-      {no:29,date:"2026-06-19",stage:"小组赛",group:"C",a:"BRA",b:"HAI",venue:"Lincoln Financial Field, Philadelphia"},
-      {no:30,date:"2026-06-19",stage:"小组赛",group:"C",a:"SCO",b:"MAR",venue:"Gillette Stadium, Boston"},
-      {no:31,date:"2026-06-19",stage:"小组赛",group:"D",a:"TUR",b:"PAR",venue:"Levi's Stadium, San Francisco Bay Area"},
-      {no:32,date:"2026-06-19",stage:"小组赛",group:"D",a:"USA",b:"AUS",venue:"Lumen Field, Seattle"},
-      {no:33,date:"2026-06-20",stage:"小组赛",group:"E",a:"GER",b:"CIV",venue:"BMO Field, Toronto"},
-      {no:34,date:"2026-06-20",stage:"小组赛",group:"E",a:"ECU",b:"CUW",venue:"Arrowhead Stadium, Kansas City"},
-      {no:35,date:"2026-06-20",stage:"小组赛",group:"F",a:"NED",b:"SWE",venue:"NRG Stadium, Houston"},
-      {no:36,date:"2026-06-20",stage:"小组赛",group:"F",a:"TUN",b:"JPN",venue:"Estadio BBVA, Monterrey"},
-      {no:37,date:"2026-06-21",stage:"小组赛",group:"H",a:"URU",b:"CPV",venue:"Hard Rock Stadium, Miami"},
-      {no:38,date:"2026-06-21",stage:"小组赛",group:"H",a:"ESP",b:"KSA",venue:"Mercedes-Benz Stadium, Atlanta"},
-      {no:39,date:"2026-06-21",stage:"小组赛",group:"G",a:"BEL",b:"IRN",venue:"SoFi Stadium, Los Angeles"},
-      {no:40,date:"2026-06-21",stage:"小组赛",group:"G",a:"NZL",b:"EGY",venue:"BC Place, Vancouver"},
-      {no:41,date:"2026-06-22",stage:"小组赛",group:"I",a:"NOR",b:"SEN",venue:"MetLife Stadium, New York New Jersey"},
-      {no:42,date:"2026-06-22",stage:"小组赛",group:"I",a:"FRA",b:"IRQ",venue:"Lincoln Financial Field, Philadelphia"},
-      {no:43,date:"2026-06-22",stage:"小组赛",group:"J",a:"ARG",b:"AUT",venue:"AT&T Stadium, Dallas"},
-      {no:44,date:"2026-06-22",stage:"小组赛",group:"J",a:"JOR",b:"ALG",venue:"Levi's Stadium, San Francisco Bay Area"},
-      {no:45,date:"2026-06-23",stage:"小组赛",group:"L",a:"ENG",b:"GHA",venue:"Gillette Stadium, Boston"},
-      {no:46,date:"2026-06-23",stage:"小组赛",group:"L",a:"PAN",b:"CRO",venue:"BMO Field, Toronto"},
-      {no:47,date:"2026-06-23",stage:"小组赛",group:"K",a:"POR",b:"UZB",venue:"NRG Stadium, Houston"},
-      {no:48,date:"2026-06-23",stage:"小组赛",group:"K",a:"COL",b:"COD",venue:"Estadio Akron, Guadalajara"},
-      {no:49,date:"2026-06-24",stage:"小组赛",group:"C",a:"SCO",b:"BRA",venue:"Hard Rock Stadium, Miami"},
-      {no:50,date:"2026-06-24",stage:"小组赛",group:"C",a:"MAR",b:"HAI",venue:"Mercedes-Benz Stadium, Atlanta"},
-      {no:51,date:"2026-06-24",stage:"小组赛",group:"B",a:"SUI",b:"CAN",venue:"BC Place, Vancouver"},
-      {no:52,date:"2026-06-24",stage:"小组赛",group:"B",a:"BIH",b:"QAT",venue:"Lumen Field, Seattle"},
-      {no:53,date:"2026-06-24",stage:"小组赛",group:"A",a:"CZE",b:"MEX",venue:"Estadio Azteca, Mexico City"},
-      {no:54,date:"2026-06-24",stage:"小组赛",group:"A",a:"RSA",b:"KOR",venue:"Estadio BBVA, Monterrey"},
-      {no:55,date:"2026-06-25",stage:"小组赛",group:"E",a:"CUW",b:"CIV",venue:"Lincoln Financial Field, Philadelphia"},
-      {no:56,date:"2026-06-25",stage:"小组赛",group:"E",a:"ECU",b:"GER",venue:"MetLife Stadium, New York New Jersey"},
-      {no:57,date:"2026-06-25",stage:"小组赛",group:"F",a:"JPN",b:"SWE",venue:"AT&T Stadium, Dallas"},
-      {no:58,date:"2026-06-25",stage:"小组赛",group:"F",a:"TUN",b:"NED",venue:"Arrowhead Stadium, Kansas City"},
-      {no:59,date:"2026-06-25",stage:"小组赛",group:"D",a:"TUR",b:"USA",venue:"SoFi Stadium, Los Angeles"},
-      {no:60,date:"2026-06-25",stage:"小组赛",group:"D",a:"PAR",b:"AUS",venue:"Levi's Stadium, San Francisco Bay Area"},
-      {no:61,date:"2026-06-26",stage:"小组赛",group:"I",a:"NOR",b:"FRA",venue:"Gillette Stadium, Boston"},
-      {no:62,date:"2026-06-26",stage:"小组赛",group:"I",a:"SEN",b:"IRQ",venue:"BMO Field, Toronto"},
-      {no:63,date:"2026-06-26",stage:"小组赛",group:"G",a:"EGY",b:"IRN",venue:"Lumen Field, Seattle"},
-      {no:64,date:"2026-06-26",stage:"小组赛",group:"G",a:"NZL",b:"BEL",venue:"BC Place, Vancouver"},
-      {no:65,date:"2026-06-26",stage:"小组赛",group:"H",a:"CPV",b:"KSA",venue:"NRG Stadium, Houston"},
-      {no:66,date:"2026-06-26",stage:"小组赛",group:"H",a:"URU",b:"ESP",venue:"Estadio Akron, Guadalajara"},
-      {no:67,date:"2026-06-27",stage:"小组赛",group:"L",a:"PAN",b:"ENG",venue:"MetLife Stadium, New York New Jersey"},
-      {no:68,date:"2026-06-27",stage:"小组赛",group:"L",a:"CRO",b:"GHA",venue:"Lincoln Financial Field, Philadelphia"},
-      {no:69,date:"2026-06-27",stage:"小组赛",group:"J",a:"ALG",b:"AUT",venue:"Arrowhead Stadium, Kansas City"},
-      {no:70,date:"2026-06-27",stage:"小组赛",group:"J",a:"JOR",b:"ARG",venue:"AT&T Stadium, Dallas"},
-      {no:71,date:"2026-06-27",stage:"小组赛",group:"K",a:"COL",b:"POR",venue:"Hard Rock Stadium, Miami"},
-      {no:72,date:"2026-06-27",stage:"小组赛",group:"K",a:"COD",b:"UZB",venue:"Mercedes-Benz Stadium, Atlanta"},
-      {no:73,date:"2026-06-28",stage:"32强赛",a:"Runner-up Group A",b:"Runner-up Group B",venue:"SoFi Stadium, Los Angeles"},
-      {no:74,date:"2026-06-29",stage:"32强赛",a:"Winner Group E",b:"3rd Group A/B/C/D/F",venue:"Gillette Stadium, Boston"},
-      {no:75,date:"2026-06-29",stage:"32强赛",a:"Winner Group F",b:"Runner-up Group C",venue:"Estadio BBVA, Monterrey"},
-      {no:76,date:"2026-06-29",stage:"32强赛",a:"Winner Group C",b:"Runner-up Group F",venue:"NRG Stadium, Houston"},
-      {no:77,date:"2026-06-30",stage:"32强赛",a:"Winner Group I",b:"3rd Group C/D/F/G/H",venue:"MetLife Stadium, New York New Jersey"},
-      {no:78,date:"2026-06-30",stage:"32强赛",a:"Runner-up Group E",b:"Runner-up Group I",venue:"AT&T Stadium, Dallas"},
-      {no:79,date:"2026-06-30",stage:"32强赛",a:"Winner Group A",b:"3rd Group C/E/F/H/I",venue:"Estadio Azteca, Mexico City"},
-      {no:80,date:"2026-07-01",stage:"32强赛",a:"Winner Group L",b:"3rd Group E/H/I/J/K",venue:"Mercedes-Benz Stadium, Atlanta"},
-      {no:81,date:"2026-07-01",stage:"32强赛",a:"Winner Group D",b:"3rd Group B/E/F/I/J",venue:"Levi's Stadium, San Francisco Bay Area"},
-      {no:82,date:"2026-07-01",stage:"32强赛",a:"Winner Group G",b:"3rd Group A/E/H/I/J",venue:"Lumen Field, Seattle"},
-      {no:83,date:"2026-07-02",stage:"32强赛",a:"Runner-up Group K",b:"Runner-up Group L",venue:"BMO Field, Toronto"},
-      {no:84,date:"2026-07-02",stage:"32强赛",a:"Winner Group H",b:"Runner-up Group J",venue:"SoFi Stadium, Los Angeles"},
-      {no:85,date:"2026-07-02",stage:"32强赛",a:"Winner Group B",b:"3rd Group E/F/G/I/J",venue:"BC Place, Vancouver"},
-      {no:86,date:"2026-07-03",stage:"32强赛",a:"Winner Group J",b:"Runner-up Group H",venue:"Hard Rock Stadium, Miami"},
-      {no:87,date:"2026-07-03",stage:"32强赛",a:"Winner Group K",b:"3rd Group D/E/I/J/L",venue:"Arrowhead Stadium, Kansas City"},
-      {no:88,date:"2026-07-03",stage:"32强赛",a:"Runner-up Group D",b:"Runner-up Group G",venue:"AT&T Stadium, Dallas"},
-      {no:89,date:"2026-07-04",stage:"16强赛",a:"Winner Match 74",b:"Winner Match 77",venue:"Lincoln Financial Field, Philadelphia"},
-      {no:90,date:"2026-07-04",stage:"16强赛",a:"Winner Match 73",b:"Winner Match 75",venue:"NRG Stadium, Houston"},
-      {no:91,date:"2026-07-05",stage:"16强赛",a:"Winner Match 76",b:"Winner Match 78",venue:"MetLife Stadium, New York New Jersey"},
-      {no:92,date:"2026-07-05",stage:"16强赛",a:"Winner Match 79",b:"Winner Match 80",venue:"Estadio Azteca, Mexico City"},
-      {no:93,date:"2026-07-06",stage:"16强赛",a:"Winner Match 83",b:"Winner Match 84",venue:"AT&T Stadium, Dallas"},
-      {no:94,date:"2026-07-06",stage:"16强赛",a:"Winner Match 81",b:"Winner Match 82",venue:"Lumen Field, Seattle"},
-      {no:95,date:"2026-07-07",stage:"16强赛",a:"Winner Match 86",b:"Winner Match 88",venue:"Mercedes-Benz Stadium, Atlanta"},
-      {no:96,date:"2026-07-07",stage:"16强赛",a:"Winner Match 85",b:"Winner Match 87",venue:"BC Place, Vancouver"},
-      {no:97,date:"2026-07-09",stage:"1/4决赛",a:"Winner Match 89",b:"Winner Match 90",venue:"Gillette Stadium, Boston"},
-      {no:98,date:"2026-07-10",stage:"1/4决赛",a:"Winner Match 93",b:"Winner Match 94",venue:"SoFi Stadium, Los Angeles"},
-      {no:99,date:"2026-07-11",stage:"1/4决赛",a:"Winner Match 91",b:"Winner Match 92",venue:"Hard Rock Stadium, Miami"},
-      {no:100,date:"2026-07-11",stage:"1/4决赛",a:"Winner Match 95",b:"Winner Match 96",venue:"Arrowhead Stadium, Kansas City"},
-      {no:101,date:"2026-07-14",stage:"半决赛",a:"Winner Match 97",b:"Winner Match 98",venue:"AT&T Stadium, Dallas"},
-      {no:102,date:"2026-07-15",stage:"半决赛",a:"Winner Match 99",b:"Winner Match 100",venue:"Mercedes-Benz Stadium, Atlanta"},
-      {no:103,date:"2026-07-18",stage:"三四名决赛",a:"Loser Match 101",b:"Loser Match 102",venue:"Hard Rock Stadium, Miami"},
-      {no:104,date:"2026-07-19",stage:"决赛",a:"Winner Match 101",b:"Winner Match 102",venue:"MetLife Stadium, New York New Jersey"}
+      {no:1,bj:"2026-06-12 03:00",date:"2026-06-11",stage:"小组赛",group:"A",a:"MEX",b:"RSA",score:"2-0",venue:"Estadio Azteca, Mexico City"},
+      {no:2,bj:"2026-06-12 10:00",date:"2026-06-11",stage:"小组赛",group:"A",a:"KOR",b:"CZE",score:"2-1",venue:"Estadio Akron, Guadalajara"},
+      {no:3,bj:"2026-06-13 03:00",date:"2026-06-12",stage:"小组赛",group:"B",a:"CAN",b:"BIH",score:"1-1",venue:"BMO Field, Toronto"},
+      {no:4,bj:"2026-06-13 09:00",date:"2026-06-12",stage:"小组赛",group:"D",a:"USA",b:"PAR",score:"4-1",venue:"SoFi Stadium, Los Angeles"},
+      {no:5,bj:"2026-06-14 03:00",date:"2026-06-13",stage:"小组赛",group:"B",a:"QAT",b:"SUI",score:"1-1",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:6,bj:"2026-06-14 06:00",date:"2026-06-13",stage:"小组赛",group:"C",a:"BRA",b:"MAR",score:"1-1",venue:"MetLife Stadium, New York New Jersey"},
+      {no:7,bj:"2026-06-14 09:00",date:"2026-06-13",stage:"小组赛",group:"C",a:"HAI",b:"SCO",score:"0-1",venue:"Gillette Stadium, Boston"},
+      {no:8,bj:"2026-06-14 12:00",date:"2026-06-13",stage:"小组赛",group:"D",a:"AUS",b:"TUR",score:"2-0",venue:"BC Place, Vancouver"},
+      {no:9,bj:"2026-06-15 01:00",date:"2026-06-14",stage:"小组赛",group:"E",a:"GER",b:"CUW",score:"7-1",venue:"NRG Stadium, Houston"},
+      {no:10,bj:"2026-06-15 04:00",date:"2026-06-14",stage:"小组赛",group:"F",a:"NED",b:"JPN",score:"2-2",venue:"AT&T Stadium, Dallas"},
+      {no:11,bj:"2026-06-15 07:00",date:"2026-06-14",stage:"小组赛",group:"E",a:"CIV",b:"ECU",score:"1-0",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:12,bj:"2026-06-15 10:00",date:"2026-06-14",stage:"小组赛",group:"F",a:"SWE",b:"TUN",score:"5-1",venue:"Estadio BBVA, Monterrey"},
+      {no:13,bj:"2026-06-16 06:00",date:"2026-06-15",stage:"小组赛",group:"H",a:"KSA",b:"URU",score:"1-1",venue:"Hard Rock Stadium, Miami"},
+      {no:14,bj:"2026-06-16 00:00",date:"2026-06-15",stage:"小组赛",group:"H",a:"ESP",b:"CPV",score:"0-0",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:15,bj:"2026-06-16 09:00",date:"2026-06-15",stage:"小组赛",group:"G",a:"IRN",b:"NZL",score:"2-2",venue:"SoFi Stadium, Los Angeles"},
+      {no:16,bj:"2026-06-16 03:00",date:"2026-06-15",stage:"小组赛",group:"G",a:"BEL",b:"EGY",score:"1-1",venue:"Lumen Field, Seattle"},
+      {no:17,bj:"2026-06-17 03:00",date:"2026-06-16",stage:"小组赛",group:"I",a:"FRA",b:"SEN",score:"3-1",venue:"MetLife Stadium, New York New Jersey"},
+      {no:18,bj:"2026-06-17 06:00",date:"2026-06-16",stage:"小组赛",group:"I",a:"IRQ",b:"NOR",score:"1-4",venue:"Gillette Stadium, Boston"},
+      {no:19,bj:"2026-06-17 09:00",date:"2026-06-16",stage:"小组赛",group:"J",a:"ARG",b:"ALG",score:"3-0",venue:"Arrowhead Stadium, Kansas City"},
+      {no:20,bj:"2026-06-17 12:00",date:"2026-06-16",stage:"小组赛",group:"J",a:"AUT",b:"JOR",score:"3-1",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:21,bj:"2026-06-18 07:00",date:"2026-06-17",stage:"小组赛",group:"L",a:"GHA",b:"PAN",score:"1-0",venue:"BMO Field, Toronto"},
+      {no:22,bj:"2026-06-18 04:00",date:"2026-06-17",stage:"小组赛",group:"L",a:"ENG",b:"CRO",score:"4-2",venue:"AT&T Stadium, Dallas"},
+      {no:23,bj:"2026-06-18 01:00",date:"2026-06-17",stage:"小组赛",group:"K",a:"POR",b:"COD",score:"1-1",venue:"NRG Stadium, Houston"},
+      {no:24,bj:"2026-06-18 10:00",date:"2026-06-17",stage:"小组赛",group:"K",a:"UZB",b:"COL",score:"1-3",venue:"Estadio Azteca, Mexico City"},
+      {no:25,bj:"2026-06-19 00:00",date:"2026-06-18",stage:"小组赛",group:"A",a:"CZE",b:"RSA",score:"1-1",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:26,bj:"2026-06-19 03:00",date:"2026-06-18",stage:"小组赛",group:"B",a:"SUI",b:"BIH",score:"4-1",venue:"SoFi Stadium, Los Angeles"},
+      {no:27,bj:"2026-06-19 06:00",date:"2026-06-18",stage:"小组赛",group:"B",a:"CAN",b:"QAT",score:"6-0",venue:"BC Place, Vancouver"},
+      {no:28,bj:"2026-06-19 09:00",date:"2026-06-18",stage:"小组赛",group:"A",a:"MEX",b:"KOR",score:"1-0",venue:"Estadio Akron, Guadalajara"},
+      {no:29,bj:"2026-06-20 08:30",date:"2026-06-19",stage:"小组赛",group:"C",a:"BRA",b:"HAI",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:30,bj:"2026-06-20 06:00",date:"2026-06-19",stage:"小组赛",group:"C",a:"SCO",b:"MAR",venue:"Gillette Stadium, Boston"},
+      {no:31,bj:"2026-06-20 11:00",date:"2026-06-19",stage:"小组赛",group:"D",a:"TUR",b:"PAR",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:32,bj:"2026-06-20 03:00",date:"2026-06-19",stage:"小组赛",group:"D",a:"USA",b:"AUS",venue:"Lumen Field, Seattle"},
+      {no:33,bj:"2026-06-21 04:00",date:"2026-06-20",stage:"小组赛",group:"E",a:"GER",b:"CIV",venue:"BMO Field, Toronto"},
+      {no:34,bj:"2026-06-21 08:00",date:"2026-06-20",stage:"小组赛",group:"E",a:"ECU",b:"CUW",venue:"Arrowhead Stadium, Kansas City"},
+      {no:35,bj:"2026-06-21 01:00",date:"2026-06-20",stage:"小组赛",group:"F",a:"NED",b:"SWE",venue:"NRG Stadium, Houston"},
+      {no:36,bj:"2026-06-21 12:00",date:"2026-06-20",stage:"小组赛",group:"F",a:"TUN",b:"JPN",venue:"Estadio BBVA, Monterrey"},
+      {no:37,bj:"2026-06-22 06:00",date:"2026-06-21",stage:"小组赛",group:"H",a:"URU",b:"CPV",venue:"Hard Rock Stadium, Miami"},
+      {no:38,bj:"2026-06-22 00:00",date:"2026-06-21",stage:"小组赛",group:"H",a:"ESP",b:"KSA",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:39,bj:"2026-06-22 03:00",date:"2026-06-21",stage:"小组赛",group:"G",a:"BEL",b:"IRN",venue:"SoFi Stadium, Los Angeles"},
+      {no:40,bj:"2026-06-22 09:00",date:"2026-06-21",stage:"小组赛",group:"G",a:"NZL",b:"EGY",venue:"BC Place, Vancouver"},
+      {no:41,bj:"2026-06-23 08:00",date:"2026-06-22",stage:"小组赛",group:"I",a:"NOR",b:"SEN",venue:"MetLife Stadium, New York New Jersey"},
+      {no:42,bj:"2026-06-23 05:00",date:"2026-06-22",stage:"小组赛",group:"I",a:"FRA",b:"IRQ",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:43,bj:"2026-06-23 01:00",date:"2026-06-22",stage:"小组赛",group:"J",a:"ARG",b:"AUT",venue:"AT&T Stadium, Dallas"},
+      {no:44,bj:"2026-06-23 11:00",date:"2026-06-22",stage:"小组赛",group:"J",a:"JOR",b:"ALG",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:45,bj:"2026-06-24 04:00",date:"2026-06-23",stage:"小组赛",group:"L",a:"ENG",b:"GHA",venue:"Gillette Stadium, Boston"},
+      {no:46,bj:"2026-06-24 07:00",date:"2026-06-23",stage:"小组赛",group:"L",a:"PAN",b:"CRO",venue:"BMO Field, Toronto"},
+      {no:47,bj:"2026-06-24 01:00",date:"2026-06-23",stage:"小组赛",group:"K",a:"POR",b:"UZB",venue:"NRG Stadium, Houston"},
+      {no:48,bj:"2026-06-24 10:00",date:"2026-06-23",stage:"小组赛",group:"K",a:"COL",b:"COD",venue:"Estadio Akron, Guadalajara"},
+      {no:49,bj:"2026-06-25 06:00",date:"2026-06-24",stage:"小组赛",group:"C",a:"SCO",b:"BRA",venue:"Hard Rock Stadium, Miami"},
+      {no:50,bj:"2026-06-25 06:00",date:"2026-06-24",stage:"小组赛",group:"C",a:"MAR",b:"HAI",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:51,bj:"2026-06-25 03:00",date:"2026-06-24",stage:"小组赛",group:"B",a:"SUI",b:"CAN",venue:"BC Place, Vancouver"},
+      {no:52,bj:"2026-06-25 03:00",date:"2026-06-24",stage:"小组赛",group:"B",a:"BIH",b:"QAT",venue:"Lumen Field, Seattle"},
+      {no:53,bj:"2026-06-25 09:00",date:"2026-06-24",stage:"小组赛",group:"A",a:"CZE",b:"MEX",venue:"Estadio Azteca, Mexico City"},
+      {no:54,bj:"2026-06-25 09:00",date:"2026-06-24",stage:"小组赛",group:"A",a:"RSA",b:"KOR",venue:"Estadio BBVA, Monterrey"},
+      {no:55,bj:"2026-06-26 04:00",date:"2026-06-25",stage:"小组赛",group:"E",a:"CUW",b:"CIV",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:56,bj:"2026-06-26 04:00",date:"2026-06-25",stage:"小组赛",group:"E",a:"ECU",b:"GER",venue:"MetLife Stadium, New York New Jersey"},
+      {no:57,bj:"2026-06-26 07:00",date:"2026-06-25",stage:"小组赛",group:"F",a:"JPN",b:"SWE",venue:"AT&T Stadium, Dallas"},
+      {no:58,bj:"2026-06-26 07:00",date:"2026-06-25",stage:"小组赛",group:"F",a:"TUN",b:"NED",venue:"Arrowhead Stadium, Kansas City"},
+      {no:59,bj:"2026-06-26 10:00",date:"2026-06-25",stage:"小组赛",group:"D",a:"TUR",b:"USA",venue:"SoFi Stadium, Los Angeles"},
+      {no:60,bj:"2026-06-26 10:00",date:"2026-06-25",stage:"小组赛",group:"D",a:"PAR",b:"AUS",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:61,bj:"2026-06-27 03:00",date:"2026-06-26",stage:"小组赛",group:"I",a:"NOR",b:"FRA",venue:"Gillette Stadium, Boston"},
+      {no:62,bj:"2026-06-27 03:00",date:"2026-06-26",stage:"小组赛",group:"I",a:"SEN",b:"IRQ",venue:"BMO Field, Toronto"},
+      {no:63,bj:"2026-06-27 11:00",date:"2026-06-26",stage:"小组赛",group:"G",a:"EGY",b:"IRN",venue:"Lumen Field, Seattle"},
+      {no:64,bj:"2026-06-27 11:00",date:"2026-06-26",stage:"小组赛",group:"G",a:"NZL",b:"BEL",venue:"BC Place, Vancouver"},
+      {no:65,bj:"2026-06-27 08:00",date:"2026-06-26",stage:"小组赛",group:"H",a:"CPV",b:"KSA",venue:"NRG Stadium, Houston"},
+      {no:66,bj:"2026-06-27 08:00",date:"2026-06-26",stage:"小组赛",group:"H",a:"URU",b:"ESP",venue:"Estadio Akron, Guadalajara"},
+      {no:67,bj:"2026-06-28 05:00",date:"2026-06-27",stage:"小组赛",group:"L",a:"PAN",b:"ENG",venue:"MetLife Stadium, New York New Jersey"},
+      {no:68,bj:"2026-06-28 05:00",date:"2026-06-27",stage:"小组赛",group:"L",a:"CRO",b:"GHA",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:69,bj:"2026-06-28 10:00",date:"2026-06-27",stage:"小组赛",group:"J",a:"ALG",b:"AUT",venue:"Arrowhead Stadium, Kansas City"},
+      {no:70,bj:"2026-06-28 10:00",date:"2026-06-27",stage:"小组赛",group:"J",a:"JOR",b:"ARG",venue:"AT&T Stadium, Dallas"},
+      {no:71,bj:"2026-06-28 07:30",date:"2026-06-27",stage:"小组赛",group:"K",a:"COL",b:"POR",venue:"Hard Rock Stadium, Miami"},
+      {no:72,bj:"2026-06-28 07:30",date:"2026-06-27",stage:"小组赛",group:"K",a:"COD",b:"UZB",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:73,bj:"2026-06-29 03:00",date:"2026-06-28",stage:"32强赛",a:"Runner-up Group A",b:"Runner-up Group B",venue:"SoFi Stadium, Los Angeles"},
+      {no:74,bj:"2026-06-30 04:30",date:"2026-06-29",stage:"32强赛",a:"Winner Group E",b:"3rd Group A/B/C/D/F",venue:"Gillette Stadium, Boston"},
+      {no:75,bj:"2026-06-30 09:00",date:"2026-06-29",stage:"32强赛",a:"Winner Group F",b:"Runner-up Group C",venue:"Estadio BBVA, Monterrey"},
+      {no:76,bj:"2026-06-30 01:00",date:"2026-06-29",stage:"32强赛",a:"Winner Group C",b:"Runner-up Group F",venue:"NRG Stadium, Houston"},
+      {no:77,bj:"2026-07-01 05:00",date:"2026-06-30",stage:"32强赛",a:"Winner Group I",b:"3rd Group C/D/F/G/H",venue:"MetLife Stadium, New York New Jersey"},
+      {no:78,bj:"2026-07-01 01:00",date:"2026-06-30",stage:"32强赛",a:"Runner-up Group E",b:"Runner-up Group I",venue:"AT&T Stadium, Dallas"},
+      {no:79,bj:"2026-07-01 09:00",date:"2026-06-30",stage:"32强赛",a:"Winner Group A",b:"3rd Group C/E/F/H/I",venue:"Estadio Azteca, Mexico City"},
+      {no:80,bj:"2026-07-02 00:00",date:"2026-07-01",stage:"32强赛",a:"Winner Group L",b:"3rd Group E/H/I/J/K",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:81,bj:"2026-07-02 08:00",date:"2026-07-01",stage:"32强赛",a:"Winner Group D",b:"3rd Group B/E/F/I/J",venue:"Levi's Stadium, San Francisco Bay Area"},
+      {no:82,bj:"2026-07-02 04:00",date:"2026-07-01",stage:"32强赛",a:"Winner Group G",b:"3rd Group A/E/H/I/J",venue:"Lumen Field, Seattle"},
+      {no:83,bj:"2026-07-03 07:00",date:"2026-07-02",stage:"32强赛",a:"Runner-up Group K",b:"Runner-up Group L",venue:"BMO Field, Toronto"},
+      {no:84,bj:"2026-07-03 03:00",date:"2026-07-02",stage:"32强赛",a:"Winner Group H",b:"Runner-up Group J",venue:"SoFi Stadium, Los Angeles"},
+      {no:85,bj:"2026-07-03 11:00",date:"2026-07-02",stage:"32强赛",a:"Winner Group B",b:"3rd Group E/F/G/I/J",venue:"BC Place, Vancouver"},
+      {no:86,bj:"2026-07-04 06:00",date:"2026-07-03",stage:"32强赛",a:"Winner Group J",b:"Runner-up Group H",venue:"Hard Rock Stadium, Miami"},
+      {no:87,bj:"2026-07-04 09:30",date:"2026-07-03",stage:"32强赛",a:"Winner Group K",b:"3rd Group D/E/I/J/L",venue:"Arrowhead Stadium, Kansas City"},
+      {no:88,bj:"2026-07-04 02:00",date:"2026-07-03",stage:"32强赛",a:"Runner-up Group D",b:"Runner-up Group G",venue:"AT&T Stadium, Dallas"},
+      {no:89,bj:"2026-07-05 05:00",date:"2026-07-04",stage:"16强赛",a:"Winner Match 74",b:"Winner Match 77",venue:"Lincoln Financial Field, Philadelphia"},
+      {no:90,bj:"2026-07-05 01:00",date:"2026-07-04",stage:"16强赛",a:"Winner Match 73",b:"Winner Match 75",venue:"NRG Stadium, Houston"},
+      {no:91,bj:"2026-07-06 04:00",date:"2026-07-05",stage:"16强赛",a:"Winner Match 76",b:"Winner Match 78",venue:"MetLife Stadium, New York New Jersey"},
+      {no:92,bj:"2026-07-06 08:00",date:"2026-07-05",stage:"16强赛",a:"Winner Match 79",b:"Winner Match 80",venue:"Estadio Azteca, Mexico City"},
+      {no:93,bj:"2026-07-07 03:00",date:"2026-07-06",stage:"16强赛",a:"Winner Match 83",b:"Winner Match 84",venue:"AT&T Stadium, Dallas"},
+      {no:94,bj:"2026-07-07 08:00",date:"2026-07-06",stage:"16强赛",a:"Winner Match 81",b:"Winner Match 82",venue:"Lumen Field, Seattle"},
+      {no:95,bj:"2026-07-08 00:00",date:"2026-07-07",stage:"16强赛",a:"Winner Match 86",b:"Winner Match 88",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:96,bj:"2026-07-08 04:00",date:"2026-07-07",stage:"16强赛",a:"Winner Match 85",b:"Winner Match 87",venue:"BC Place, Vancouver"},
+      {no:97,bj:"2026-07-10 04:00",date:"2026-07-09",stage:"1/4决赛",a:"Winner Match 89",b:"Winner Match 90",venue:"Gillette Stadium, Boston"},
+      {no:98,bj:"2026-07-11 03:00",date:"2026-07-10",stage:"1/4决赛",a:"Winner Match 93",b:"Winner Match 94",venue:"SoFi Stadium, Los Angeles"},
+      {no:99,bj:"2026-07-12 05:00",date:"2026-07-11",stage:"1/4决赛",a:"Winner Match 91",b:"Winner Match 92",venue:"Hard Rock Stadium, Miami"},
+      {no:100,bj:"2026-07-12 09:00",date:"2026-07-11",stage:"1/4决赛",a:"Winner Match 95",b:"Winner Match 96",venue:"Arrowhead Stadium, Kansas City"},
+      {no:101,bj:"2026-07-15 03:00",date:"2026-07-14",stage:"半决赛",a:"Winner Match 97",b:"Winner Match 98",venue:"AT&T Stadium, Dallas"},
+      {no:102,bj:"2026-07-16 03:00",date:"2026-07-15",stage:"半决赛",a:"Winner Match 99",b:"Winner Match 100",venue:"Mercedes-Benz Stadium, Atlanta"},
+      {no:103,bj:"2026-07-19 05:00",date:"2026-07-18",stage:"三四名决赛",a:"Loser Match 101",b:"Loser Match 102",venue:"Hard Rock Stadium, Miami"},
+      {no:104,bj:"2026-07-20 03:00",date:"2026-07-19",stage:"决赛",a:"Winner Match 101",b:"Winner Match 102",venue:"MetLife Stadium, New York New Jersey"}
     ];
 
     const els = {
@@ -1334,9 +1493,12 @@
       bracket: document.getElementById("bracketView"),
       participant: document.getElementById("participantName"),
       saveSigned: document.getElementById("saveSignedBtn"),
+      saveVersion: document.getElementById("saveVersionBtn"),
       shareLink: document.getElementById("shareLinkBtn"),
       shareUrl: document.getElementById("shareUrl"),
       copyShare: document.getElementById("copyShareBtn"),
+      versionSummary: document.getElementById("versionSummary"),
+      versionList: document.getElementById("versionList"),
       print: document.getElementById("printBtn"),
       export: document.getElementById("exportBtn"),
       clear: document.getElementById("clearBtn")
@@ -1380,11 +1542,12 @@
 
     let participantName = readParticipant();
     let saved = readSaved();
+    let versions = readVersions();
     applySharedStateFromHash();
 
     function readSaved() {
       try {
-        return JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
+        return normalizeSavedRows(JSON.parse(localStorage.getItem(STORE_KEY) || "{}"));
       } catch {
         return {};
       }
@@ -1402,7 +1565,7 @@
     function writeSaved() {
       localStorage.setItem(STORE_KEY, JSON.stringify(saved));
       updateStats();
-      if (els.shareUrl.value) els.shareUrl.value = currentShareURL();
+      markShareDirty();
     }
 
     function cleanSharedSaved(input) {
@@ -1415,7 +1578,59 @@
         if (typeof row.note === "string") clean.note = row.note.slice(0, 120);
         if (Object.keys(clean).length) output[no] = clean;
       });
+      return normalizeSavedRows(output);
+    }
+
+    function normalizeSavedRows(input) {
+      const output = {};
+      Object.entries(input || {}).forEach(([no, row]) => {
+        if (!/^\d+$/.test(no) || !row || typeof row !== "object") return;
+        const match = matches.find(item => String(item.no) === String(no));
+        if (!match) return;
+        const clean = {...row};
+        if (match.stage !== "小组赛" && clean.pick === "draw") {
+          if (clean.advance === "left" || clean.advance === "right") {
+            clean.pick = clean.advance;
+          } else {
+            delete clean.pick;
+          }
+          delete clean.advance;
+        }
+        if (Object.keys(clean).length) output[no] = clean;
+      });
       return output;
+    }
+
+    function readVersions() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(VERSION_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed.map(cleanVersion).filter(Boolean) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function cleanVersion(version) {
+      if (!version || typeof version !== "object") return null;
+      const no = Number(version.no);
+      const savedSnapshot = cleanSharedSaved(version.saved || {});
+      return {
+        id: String(version.id || `version-${no || Date.now()}-${Math.random().toString(36).slice(2, 7)}`),
+        no: Number.isFinite(no) && no > 0 ? no : 1,
+        label: String(version.label || `预测 v${Number.isFinite(no) && no > 0 ? no : 1}`).slice(0, 48),
+        createdAt: String(version.createdAt || beijingNow()).slice(0, 32),
+        saved: savedSnapshot
+      };
+    }
+
+    function writeVersions() {
+      localStorage.setItem(VERSION_KEY, JSON.stringify(versions));
+    }
+
+    function markShareDirty() {
+      if (!els.shareUrl.value) return;
+      els.shareUrl.value = "";
+      els.shareUrl.placeholder = "预测已更新，请重新生成链接";
     }
 
     function encodeSharedState(payload) {
@@ -1447,18 +1662,84 @@
           participantName = payload.name.slice(0, 24);
           localStorage.setItem(PARTICIPANT_KEY, participantName);
         }
+        if (payload.version && typeof payload.version === "object") {
+          const imported = cleanVersion({
+            ...payload.version,
+            saved
+          });
+          const exists = imported && versions.some(version => version.label === imported.label && version.createdAt === imported.createdAt);
+          if (imported && !exists) {
+            versions = [imported, ...versions].slice(0, MAX_VERSIONS);
+            writeVersions();
+          }
+        }
       } catch {
         location.hash = "";
       }
     }
 
-    function currentShareURL() {
-      return `${location.href.split("#")[0]}#p=${encodeSharedState({name: participantName, saved})}`;
+    function beijingNow() {
+      return new Intl.DateTimeFormat("sv-SE", {
+        timeZone: "Asia/Shanghai",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).format(new Date());
     }
 
-    function refreshShareURL(updateHash = false) {
+    function formatStamp(value) {
+      return String(value || "").replace("T", " ").slice(0, 16);
+    }
+
+    function nextVersionNo() {
+      return versions.reduce((max, version) => Math.max(max, Number(version.no) || 0), 0) + 1;
+    }
+
+    function participantVersionLabel(no) {
+      const base = participantName || "未署名";
+      return `${base} v${no}`;
+    }
+
+    function latestVersion() {
+      return versions[0] || null;
+    }
+
+    function savePredictionVersion() {
       writeParticipant();
-      const url = currentShareURL();
+      const no = nextVersionNo();
+      const version = {
+        id: `version-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        no,
+        label: participantVersionLabel(no),
+        createdAt: beijingNow(),
+        saved: cleanSharedSaved(saved)
+      };
+      versions = [version, ...versions].slice(0, MAX_VERSIONS);
+      writeVersions();
+      renderVersionList();
+      return version;
+    }
+
+    function shareURLForVersion(version) {
+      const payload = {
+        name: participantName,
+        saved: version?.saved || cleanSharedSaved(saved),
+        version: version ? {
+          id: version.id,
+          no: version.no,
+          label: version.label,
+          createdAt: version.createdAt
+        } : null
+      };
+      return `${location.href.split("#")[0]}#p=${encodeSharedState(payload)}`;
+    }
+
+    function refreshShareURL(updateHash = false, version = savePredictionVersion()) {
+      const url = shareURLForVersion(version);
       els.shareUrl.value = url;
       if (updateHash) history.replaceState(null, "", `#p=${url.split("#p=")[1]}`);
       return url;
@@ -1525,6 +1806,42 @@
       if (left > right) return "左队胜";
       if (left < right) return "右队胜";
       return "平";
+    }
+
+    function pickFromScore(score) {
+      if (!score) return null;
+      const [left, right] = score.split("-").map(Number);
+      if (left > right) return "left";
+      if (left < right) return "right";
+      return "draw";
+    }
+
+    function formatBeijing(match) {
+      if (!match.bj) return "";
+      const [date, time] = match.bj.split(" ");
+      return `<span class="bj-time">${escapeHTML(date)}<small>${escapeHTML(time)} 北京</small></span>`;
+    }
+
+    function shortBeijing(match) {
+      return match.bj ? match.bj.slice(5) : match.date.slice(5);
+    }
+
+    function predictionSummary(match, row = saved[match.no] || {}) {
+      if (!row.pick) return "";
+      const label = labelFor(match, row.pick);
+      const advance = row.pick === "draw" && row.advance ? `，${teamData(row.advance === "left" ? match.a : match.b)[1]}点球晋级` : "";
+      return `${label}${advance}`;
+    }
+
+    function comparePrediction(match, row = saved[match.no] || {}) {
+      const actualPick = pickFromScore(match.score);
+      if (!actualPick) return { className: "none", text: "待赛" };
+      if (!row.pick) return { className: "none", text: "预测：未保存" };
+      const isHit = row.pick === actualPick;
+      return {
+        className: isHit ? "hit" : "miss",
+        text: `预测：${predictionSummary(match, row)} · ${isHit ? "命中" : "未中"}`
+      };
     }
 
     function outcomeFor(match) {
@@ -1701,29 +2018,32 @@
     function searchable(match) {
       const a = teamData(match.a).join(" ");
       const b = teamData(match.b).join(" ");
-      return `${match.no} ${match.date} ${match.stage} ${match.group || ""} ${a} ${b} ${match.venue}`.toLowerCase();
+      return `${match.no} ${match.date} ${match.bj || ""} ${match.stage} ${match.group || ""} ${a} ${b} ${match.venue}`.toLowerCase();
     }
 
     function predictionHTML(match) {
       if (match.score) {
-        return `<span class="actual">实际：${resultFromScore(match.score)}</span>`;
+        const row = saved[match.no] || {};
+        const compare = comparePrediction(match, row);
+        const note = row.note ? `<span class="prediction-meta">备注：${escapeHTML(row.note)}</span>` : "";
+        return `
+          <div class="actual-stack">
+            <span class="actual">实际：${resultFromScore(match.score)}</span>
+            <span class="prediction-compare ${compare.className}">${escapeHTML(compare.text)}</span>
+            ${note}
+          </div>
+        `;
       }
       if (!canPredict(match)) {
         return `<span class="pending">等待晋级队</span>`;
       }
       const row = saved[match.no] || {};
-      const choices = ["left", "draw", "right"].map(value => {
+      const pickOptions = match.stage === "小组赛" ? ["left", "draw", "right"] : ["left", "right"];
+      const choices = pickOptions.map(value => {
         const active = row.pick === value ? " active" : "";
         return `<button class="choice${active}" type="button" data-no="${match.no}" data-pick="${value}">${escapeHTML(labelFor(match, value))}</button>`;
       }).join("");
-      const advance = match.stage !== "小组赛" && row.pick === "draw" ? `
-        <div class="advance">
-          <span>点球晋级</span>
-          <button class="advance-btn${row.advance === "left" ? " active" : ""}" type="button" data-no="${match.no}" data-advance="left">${escapeHTML(teamData(match.a)[1])}</button>
-          <button class="advance-btn${row.advance === "right" ? " active" : ""}" type="button" data-no="${match.no}" data-advance="right">${escapeHTML(teamData(match.b)[1])}</button>
-        </div>
-      ` : "";
-      return `<div class="prediction"><div class="choices">${choices}</div>${advance}<input class="note" data-note="${match.no}" value="${escapeHTML(row.note || "")}" placeholder="可选备注"></div>`;
+      return `<div class="prediction"><div class="choices">${choices}</div><input class="note" data-note="${match.no}" value="${escapeHTML(row.note || "")}" placeholder="可选备注"></div>`;
     }
 
     function winnerCode(match) {
@@ -1747,7 +2067,7 @@
       const rightActive = side === "right";
       return `
         <article class="bracket-card${ready}${decided}">
-          <div class="bracket-meta"><span>#${match.no}</span><span>${escapeHTML(match.date.slice(5))}</span></div>
+          <div class="bracket-meta"><span>#${match.no}</span><span>${escapeHTML(shortBeijing(match))}</span></div>
           ${bracketTeamHTML(match.a, leftActive)}
           ${bracketTeamHTML(match.b, rightActive)}
         </article>
@@ -1812,6 +2132,7 @@
         <tr class="${match.score ? "done" : ""}">
           <td data-label="场次"><span class="match-no">${match.no}</span></td>
           <td data-label="日期">${escapeHTML(match.date)}</td>
+          <td data-label="北京时间">${formatBeijing(match)}</td>
           <td data-label="阶段"><span class="stage"><span class="stage-dot"></span>${escapeHTML(match.stage)}${match.group ? ` · ${match.group}组` : ""}</span></td>
           <td data-label="左队">${teamHTML(match.a)}</td>
           <td data-label="比分"><span class="score ${match.score ? "" : "future"}">${escapeHTML(match.score || "待赛")}</span></td>
@@ -1825,6 +2146,7 @@
       renderBracket(renderedMatches);
       bindRowActions();
       updateStats(renderedMatches);
+      renderVersionList(renderedMatches);
     }
 
     function bindRowActions() {
@@ -1870,10 +2192,81 @@
       els.saved.textContent = `${filled}/${fillable}`;
     }
 
+    function versionStats(version, currentMatches = buildResolvedMatches().matches) {
+      const snapshot = version.saved || {};
+      const predicted = Object.values(snapshot).filter(row => row?.pick).length;
+      let checked = 0;
+      let hits = 0;
+      currentMatches.forEach(match => {
+        const pick = snapshot[match.no]?.pick;
+        const actualPick = pickFromScore(match.score);
+        if (!pick || !actualPick) return;
+        checked += 1;
+        if (pick === actualPick) hits += 1;
+      });
+      return { predicted, checked, hits };
+    }
+
+    function renderVersionList(currentMatches = buildResolvedMatches().matches) {
+      if (!els.versionList || !els.versionSummary) return;
+      if (!versions.length) {
+        els.versionSummary.textContent = "还没有保存版本。";
+        els.versionList.innerHTML = "";
+        return;
+      }
+
+      const latest = latestVersion();
+      els.versionSummary.textContent = `最新：${latest.label} · ${formatStamp(latest.createdAt)}`;
+      els.versionList.innerHTML = versions.map(version => {
+        const stats = versionStats(version, currentMatches);
+        const accuracy = stats.checked ? `${stats.hits}/${stats.checked}` : "0/0";
+        return `
+          <article class="version-item">
+            <div class="version-main">
+              <strong>${escapeHTML(version.label)}</strong>
+              <span>${escapeHTML(formatStamp(version.createdAt))}</span>
+            </div>
+            <div class="version-metrics">
+              <span>预测 ${stats.predicted}</span>
+              <span>已验证 ${accuracy}</span>
+            </div>
+            <div class="version-actions">
+              <button class="mini-btn" type="button" data-load-version="${escapeHTML(version.id)}">载入</button>
+              <button class="mini-btn" type="button" data-share-version="${escapeHTML(version.id)}">分享</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-load-version]").forEach(button => {
+        button.addEventListener("click", () => {
+          const version = versions.find(item => item.id === button.dataset.loadVersion);
+          if (!version) return;
+          saved = cleanSharedSaved(version.saved);
+          localStorage.setItem(STORE_KEY, JSON.stringify(saved));
+          markShareDirty();
+          render();
+        });
+      });
+
+      document.querySelectorAll("[data-share-version]").forEach(button => {
+        button.addEventListener("click", () => {
+          const version = versions.find(item => item.id === button.dataset.shareVersion);
+          if (!version) return;
+          els.shareUrl.value = shareURLForVersion(version);
+          flashButton(button, "已生成", "分享");
+        });
+      });
+    }
+
     function exportCSV() {
       writeParticipant();
       const renderedMatches = buildResolvedMatches().matches;
-      const header = ["签名","场次","日期","阶段","小组","左队中文","左队英文","左队FIFA排名","左队总身价","比分","右队中文","右队英文","右队FIFA排名","右队总身价","实际结果","预测","点球晋级","备注","地点"];
+      const exportVersion = latestVersion();
+      const exportName = exportVersion?.label || participantName || "";
+      const exportVersionNo = exportVersion ? `v${exportVersion.no}` : "";
+      const exportVersionTime = exportVersion ? formatStamp(exportVersion.createdAt) : "";
+      const header = ["签名","预测版次","版本保存时间","场次","日期","北京时间","阶段","小组","左队中文","左队英文","左队FIFA排名","左队总身价","比分","右队中文","右队英文","右队FIFA排名","右队总身价","实际结果","预测","点球晋级","预测命中","备注","地点"];
       const lines = [header];
       renderedMatches.forEach(match => {
         const left = teamData(match.a);
@@ -1883,12 +2276,13 @@
         const row = saved[match.no] || {};
         const pick = row.pick ? labelFor(match, row.pick) : "";
         const advance = row.pick === "draw" && row.advance ? `${teamData(row.advance === "left" ? match.a : match.b)[1]}点球晋级` : "";
+        const compare = match.score ? comparePrediction(match, row).text.replace(/^预测：/, "") : "";
         lines.push([
-          participantName || "",
-          match.no, match.date, match.stage, match.group || "",
+          exportName, exportVersionNo, exportVersionTime,
+          match.no, match.date, match.bj || "", match.stage, match.group || "",
           left[1], left[2], leftStats.rank ? `FIFA ${leftStats.rank}` : "", leftStats.value || "", match.score || "",
           right[1], right[2], rightStats.rank ? `FIFA ${rightStats.rank}` : "", rightStats.value || "",
-          match.score ? resultFromScore(match.score) : "", pick, advance, row.note || "", match.venue
+          match.score ? resultFromScore(match.score) : "", pick, advance, compare, row.note || "", match.venue
         ]);
       });
       const csv = lines.map(row => row.map(cell => `"${String(cell).replaceAll('"', '""')}"`).join(",")).join("\n");
@@ -1906,15 +2300,21 @@
     [els.search, els.stage, els.group, els.status].forEach(el => el.addEventListener("input", render));
     els.participant.addEventListener("input", () => {
       writeParticipant();
-      if (els.shareUrl.value) els.shareUrl.value = currentShareURL();
+      markShareDirty();
     });
     els.saveSigned.addEventListener("click", () => {
-      refreshShareURL(false);
+      writeParticipant();
+      markShareDirty();
       flashButton(els.saveSigned, "已保存", "保存签名");
     });
+    els.saveVersion.addEventListener("click", () => {
+      const version = savePredictionVersion();
+      flashButton(els.saveVersion, `已保存 v${version.no}`, "保存新版");
+    });
     els.shareLink.addEventListener("click", () => {
-      refreshShareURL(true);
-      flashButton(els.shareLink, "已生成", "生成我的预测链接");
+      const version = savePredictionVersion();
+      refreshShareURL(true, version);
+      flashButton(els.shareLink, `已生成 v${version.no}`, "生成我的预测链接");
     });
     els.copyShare.addEventListener("click", async () => {
       const value = els.shareUrl.value || refreshShareURL(false);
